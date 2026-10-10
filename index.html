@@ -213,6 +213,82 @@ details[open] .w-name .caret { transform: rotate(90deg); }
   .slots { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ===== 도구 막대 ===== */
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; padding: 10px 14px; background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; margin-bottom: 28px; font-size: .85rem; }
+.toolbar .tb-right { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
+#out { display: grid; gap: 28px; }
+#out > .toolbar { margin-bottom: 0; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; box-shadow: 0 2px 10px rgba(0,0,0,.06); }
+
+/* ===== 보고서 (종이 한 가지 모습으로 고정: 화면·인쇄 동일) ===== */
+.report {
+  --p-bg: #ffffff; --p-ink: #16191f; --p-ink2: #4b5160; --p-rule: #c9ccd3; --p-head: #eef0f4; --p-acc: #2b3480; --p-up: #1d6b45; --p-dn: #a32a30; --p-flag: #f3f1fb;
+  background: var(--p-bg); color: var(--p-ink); width: 100%; max-width: 210mm; margin: 0 auto; padding: 16mm 14mm; box-shadow: 0 2px 18px rgba(0,0,0,.12); border-radius: 4px;
+  font-family: var(--font-ui); font-size: 10pt; line-height: 1.55; display: grid; gap: 7mm;
+}
+.report h1 { font-size: 17pt; font-weight: 700; letter-spacing: -0.01em; margin: 2px 0 8px; }
+.report h2 { font-size: 11.5pt; font-weight: 700; color: var(--p-acc); border-bottom: 1.5px solid var(--p-acc); padding-bottom: 3px; margin-bottom: 8px; }
+.report section { break-inside: auto; }
+.report section > h2 { break-after: avoid; }
+.rp-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6mm; align-items: end; border-bottom: 2.5px solid var(--p-ink); padding-bottom: 5mm; }
+.rp-title { min-width: 0; flex: 1 1 auto; }
+.rp-sign { flex: none; }
+.rp-kicker { font-family: var(--font-num); font-size: 9pt; color: var(--p-ink2); letter-spacing: .04em; }
+.rp-meta { border-collapse: collapse; font-size: 9pt; }
+.rp-meta th, .rp-meta td { border: 1px solid var(--p-rule); padding: 3px 8px; text-align: left; white-space: nowrap; }
+.rp-meta th { background: var(--p-head); font-weight: 600; color: var(--p-ink2); }
+.rp-sign { border-collapse: collapse; font-size: 9pt; }
+.rp-sign th, .rp-sign td { border: 1px solid var(--p-ink2); text-align: center; padding: 2px 6px; }
+.rp-sign th { background: var(--p-head); font-weight: 600; width: 19mm; }
+.rp-sign th.v { width: 7mm; line-height: 1.3; }
+.rp-sign td { height: 16mm; }
+.rp-sample { font-size: 9pt; color: var(--p-dn); }
+.rp-list { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.rp-list li { padding-left: 2px; }
+.rp-list.num { list-style: none; padding-left: 0; font-size: 9pt; }
+.rp-list.num li { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); }
+.rp-list.num .k { color: var(--p-ink2); font-family: var(--font-num); }
+.rp-lab { display: inline-block; min-width: 5.5em; color: var(--p-acc); }
+.rp-p { color: var(--p-ink2); }
+.rp-t { border-collapse: collapse; width: 100%; font-size: 9pt; }
+.rp-t th, .rp-t td { border: 1px solid var(--p-rule); padding: 3px 6px; text-align: left; white-space: normal; }
+.rp-t thead th { background: var(--p-head); font-weight: 600; text-align: center; color: var(--p-ink); }
+.rp-t td.n { text-align: right; font-family: var(--font-num); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rp-t td.sm, .rp-t .sm { font-size: 8pt; color: var(--p-ink2); }
+.rp-t td.n.sm { white-space: normal; text-align: center; }
+.rp-t .mono { font-family: var(--font-num); }
+.rp-t tr { break-inside: avoid; }
+.rp-t tr.grp td { background: #f7f8fa; font-weight: 600; color: var(--p-ink2); font-size: 8.5pt; }
+.rp-t tr.tot td { background: var(--p-head); font-weight: 700; border-top: 1.5px solid var(--p-ink2); }
+.rp-t tr.flag td { background: var(--p-flag); }
+.rp-small { font-size: 8.3pt; }
+.rp-small th, .rp-small td { padding: 2px 4px; }
+.rp-small thead th { white-space: nowrap; }
+.rp-t:not(.rp-small) { break-inside: avoid; }
+.report .up { color: var(--p-up); } .report .dn { color: var(--p-dn); } .report .z { color: var(--p-ink2); }
+.rp-foot { font-size: 8pt; color: var(--p-ink2); margin-top: 4px; }
+.rp-op { min-height: 30mm; border: 1px solid var(--p-rule); border-radius: 2px; padding: 3mm; background-image: repeating-linear-gradient(transparent 0 7.4mm, #e6e8ec 7.4mm 7.6mm); line-height: 7.6mm; white-space: pre-wrap; }
+.rp-end { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; font-size: 7.5pt; color: var(--p-ink2); border-top: 1px solid var(--p-rule); padding-top: 3mm; }
+.report .ed { outline: none; border-bottom: 1px dashed var(--p-acc); min-width: 4em; display: inline-block; cursor: text; }
+.report .ed:focus { background: #eef0fb; }
+.report .ed.empty::before { content: attr(data-ph); color: #9aa0ab; }
+.report .rp-op.ed { display: block; border-bottom: 1px solid var(--p-rule); }
+@media (max-width: 700px) { .report { padding: 18px 14px; } .rp-head { grid-template-columns: 1fr; } .rp-t { display: block; overflow-x: auto; } }
+
+@page { size: A4 portrait; margin: 12mm 11mm; }
+@media print {
+  :root, body { background: #fff !important; color-scheme: light; }
+  header.top, .toolbar, #tip { display: none !important; }
+  .wrap { padding: 0 !important; max-width: none; display: block; }
+  #out { display: block; }
+  #report { max-width: none; width: 100%; padding: 0; margin: 0; box-shadow: none; border-radius: 0; }
+  .no-print, #tip { display: none !important; }
+  .report .ed { border-bottom: 0; }
+  .report .ed.empty::before { content: ""; }
+  .report .ed:focus { background: transparent; }
+  .report .rp-op.ed { border: 1px solid var(--p-rule); }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
 </style>
 </head>
 <body>
@@ -414,14 +490,55 @@ var OTCore = (function () {
       fileName: fileName, sheetName: sheetName, year: ym.year, month: ym.month, nDays: nDays,
       metaDays: metaDays, metaHol: metaHol, holidays: holidays, holSource: holSource, warnings: warnings, workers: workers
     };
-    month.dayInfo = [];
-    for (d = 1; d <= nDays; d++) {
-      var wd = (ym.year && ym.month) ? new Date(ym.year, ym.month - 1, d).getDay() : null;
-      month.dayInfo.push({ d: d, wd: wd, wdKo: wd == null ? '' : WD_KO[wd], hol: !!holSet[d] });
-    }
-    month.weekdays = nDays - holidays.length;
-    workers.forEach(function (w) { analyzeWorker(w, month); });
+    finishMonth(month);
     return month;
+  }
+
+
+  function finishMonth(month) {
+    var hs = {}; month.holidays.forEach(function (d) { hs[d] = true; });
+    month.dayInfo = [];
+    for (var d = 1; d <= month.nDays; d++) {
+      var wd = (month.year && month.month) ? new Date(month.year, month.month - 1, d).getDay() : null;
+      month.dayInfo.push({ d: d, wd: wd, wdKo: wd == null ? '' : WD_KO[wd], hol: !!hs[d] });
+    }
+    month.weekdays = month.nDays - month.holidays.length;
+    month.workers.forEach(function (w) { analyzeWorker(w, month); });
+    return month;
+  }
+
+  // 저장용: 계산 결과(A 등)를 빼고 원자료만 남김
+  function serialize(month) {
+    return {
+      v: 1, fileName: month.fileName, sheetName: month.sheetName, year: month.year, month: month.month, nDays: month.nDays,
+      metaDays: month.metaDays, metaHol: month.metaHol, holidays: month.holidays, holSource: month.holSource, warnings: month.warnings,
+      workers: month.workers.map(function (w) {
+        return { no: w.no, id: w.id, name: w.name, rate: w.rate, sheet: w.sheet, formulas: w.formulas,
+          days: w.days.map(function (x) { return { d: x.d, inM: x.inM, outM: x.outM, note: x.note, bw: x.bw, bo: x.bo, eo: x.eo }; }) };
+      })
+    };
+  }
+  // 저장된 JSON → 분석 가능한 month (현재 로직으로 다시 계산)
+  function hydrate(json, part) {
+    var m = JSON.parse(JSON.stringify(json));
+    m.warnings = m.warnings || [];
+    if (part) { m.part = part; m.workers.forEach(function (w) { w.part = part; }); }
+    return finishMonth(m);
+  }
+  // 여러 파트의 같은 달을 하나로 합침(작업자에 파트 표시). 휴일이 다른 파트는 경고.
+  function combine(months, label) {
+    if (!months.length) return null;
+    var base = months[0];
+    var out = { fileName: label || '전체', sheetName: '', year: base.year, month: base.month, nDays: base.nDays,
+      holidays: base.holidays.slice(), holSource: base.holSource, warnings: [], workers: [], parts: [] };
+    months.forEach(function (m) {
+      out.parts.push(m.part);
+      if (m.holidays.join(',') !== base.holidays.join(',')) out.warnings.push((m.part || m.fileName) + ' 파트의 휴일(' + m.holidays.join(', ') + '일)이 ' + (base.part || '') + ' 파트와 다릅니다.');
+      m.warnings.forEach(function (x) { out.warnings.push((m.part ? '[' + m.part + '] ' : '') + x); });
+      m.workers.forEach(function (w) { out.workers.push(w); }); // 이미 각 파트 달력으로 분석된 상태 유지
+    });
+    out.dayInfo = base.dayInfo; out.weekdays = base.weekdays;
+    return out;
   }
 
   function patternKey(x) { return fmtMin(x.inM) + '–' + fmtMin(x.outM); }
@@ -498,7 +615,7 @@ var OTCore = (function () {
     };
   }
 
-  function keyOf(w) { return w.id ? 'id:' + w.id : 'nm:' + w.name.toUpperCase(); }
+  function keyOf(w) { return (w.part ? 'p:' + w.part + '|' : '') + (w.id ? 'id:' + w.id : 'nm:' + w.name.toUpperCase()); }
 
   function compare(m1, m2) {
     var prev = m1, cur = m2;
@@ -576,7 +693,7 @@ var OTCore = (function () {
     return res;
   }
 
-  return { parseWorkbook: parseWorkbook, compare: compare, fmtMin: fmtMin, round: round, monthLabel: monthLabel, WD_KO: WD_KO };
+  return { parseWorkbook: parseWorkbook, compare: compare, serialize: serialize, hydrate: hydrate, combine: combine, teamTotals: teamTotals, keyOf: keyOf, fmtMin: fmtMin, round: round, monthLabel: monthLabel, WD_KO: WD_KO };
 })();
 
 
@@ -587,9 +704,189 @@ var SAMPLE_FILES = [{"name":"Sample_TCN_Zone_August.2026.xlsx","b64":"UEsDBBQAAA
 
 </script>
 <script>
+/* 보고서 화면(인쇄·PDF용)과 엑셀 저장 */
+var OTReport = (function () {
+  var memo = { author: '', dept: '관리재경팀', opinion: '' };   // 화면을 다시 그려도 입력값 유지
+  try { memo.author = localStorage.getItem('tcnot.author') || ''; memo.dept = localStorage.getItem('tcnot.dept') || memo.dept; } catch (e) {}
+
+  function today() { var d = new Date(); return d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '.'; }
+  function fixed(n, d) { return (Math.round(n * Math.pow(10, d)) / Math.pow(10, d)).toFixed(d); }
+
+  function build(r, X) {
+    var esc = X.esc, h = X.h, usd = X.usd, sgn = X.sgn, fm = X.fm;
+    var P = r.P, C = r.C, both = r.rows.filter(function (x) { return x.status === 'both'; });
+    var hrs = function (v) { return h(v) + 'h'; };
+    var d0 = function (v) { return '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+    function dcell(a, b, f) { var d = b - a; return '<td class="n">' + f(a) + '</td><td class="n">' + f(b) + '</td><td class="n ' + (Math.abs(d) < 0.005 ? 'z' : d > 0 ? 'up' : 'dn') + '">' + sgn(d, f) + '</td>'; }
+    function pct(a, b) { return a ? sgn((b - a) / a * 100, function (x) { return x.toFixed(1) + '%'; }) : '—'; }
+
+    var title = (X.zone ? X.zone + ' ' : '') + 'OT 월간 비교 보고서';
+    var html = '<article class="report" id="report">';
+
+    // 머리글 + 결재란
+    html += '<header class="rp-head"><div class="rp-title"><div class="rp-kicker">' + esc(r.label.p) + ' → ' + esc(r.label.c) + '</div><h1>' + esc(title) + '</h1>' +
+      '<table class="rp-meta"><tr><th>작성 부서</th><td><span class="ed" contenteditable="true" data-memo="dept">' + esc(memo.dept) + '</span></td><th>작성일</th><td>' + today() + '</td></tr>' +
+      '<tr><th>작성자</th><td><span class="ed" contenteditable="true" data-memo="author" data-ph="이름 입력">' + esc(memo.author) + '</span></td><th>대상 인원</th><td>' + P.head + '명 → ' + C.head + '명</td></tr></table></div>' +
+      '<table class="rp-sign"><tr><th rowspan="2" class="v">결<br>재</th><th>담당</th><th>검토</th><th>승인</th></tr><tr><td></td><td></td><td></td></tr></table></header>';
+    if (X.isSample) html += '<p class="rp-sample">※ 예시 데이터(익명)로 만든 보고서입니다.</p>';
+
+    // 1. 요약
+    var F = X.getFindings(r);
+    html += '<section><h2>1. 요약</h2><ul class="rp-list">' + F.map(function (f) { return '<li><b class="rp-lab">' + f[0] + '</b> ' + f[1] + '</li>'; }).join('') + '</ul></section>';
+
+    // 2. 근무일 현황
+    var hl = function (m) { return m.holidays.map(function (d) { return d + '(' + (m.dayInfo[d - 1].wdKo || '') + ')'; }).join(', '); };
+    html += '<section><h2>2. 근무일 현황</h2><table class="rp-t"><thead><tr><th>구분</th><th>' + esc(r.label.p) + '</th><th>' + esc(r.label.c) + '</th><th>증감</th></tr></thead><tbody>' +
+      '<tr><td>전체 일수</td>' + dcell(r.prev.nDays, r.cur.nDays, function (v) { return v + '일'; }) + '</tr>' +
+      '<tr><td>평일</td>' + dcell(r.prev.weekdays, r.cur.weekdays, function (v) { return v + '일'; }) + '</tr>' +
+      '<tr><td>휴일</td>' + dcell(r.prev.holidays.length, r.cur.holidays.length, function (v) { return v + '일'; }) + '</tr>' +
+      '<tr><td>휴일 날짜</td><td class="n sm">' + hl(r.prev) + '</td><td class="n sm">' + hl(r.cur) + '</td><td></td></tr>' +
+      '<tr><td>기본급 포함 B/O (평일×2h)</td>' + dcell(r.prev.weekdays * 2, r.cur.weekdays * 2, hrs) + '</tr>' +
+      '</tbody></table></section>';
+
+    // 3. OT·급여 합계
+    var perWd = function (T) { return T.wdPersonDays ? T.wdOt / T.wdPersonDays : 0; }, perHd = function (T) { return T.hdPersonDays ? T.hdOt / T.hdPersonDays : 0; };
+    var h2 = function (v) { return fixed(v, 2) + 'h'; };
+    function trow(lab, a, b, f) { return '<tr><td>' + lab + '</td>' + dcell(a, b, f) + '<td class="n">' + pct(a, b) + '</td></tr>'; }
+    html += '<section><h2>3. OT · 급여 합계</h2><table class="rp-t"><thead><tr><th>항목</th><th>' + esc(r.label.p) + '</th><th>' + esc(r.label.c) + '</th><th>증감</th><th>증감률</th></tr></thead><tbody>' +
+      '<tr class="grp"><td colspan="5">평일 OT</td></tr>' +
+      trow('평일 OT 시간', P.wdOt, C.wdOt, hrs) + trow('　1.5배 적용', P.wd15, C.wd15, hrs) + trow('　2배 적용', P.wd2, C.wd2, hrs) +
+      trow('1인·1일 평균', perWd(P), perWd(C), h2) + trow('평일 OT 금액', P.payWd, C.payWd, d0) +
+      '<tr class="grp"><td colspan="5">휴일 OT</td></tr>' +
+      trow('휴일 OT 시간', P.hdOt, C.hdOt, hrs) + trow('1인·1회 평균', perHd(P), perHd(C), h2) + trow('휴일 OT 금액', P.payHd, C.payHd, d0) +
+      '<tr class="grp"><td colspan="5">급여</td></tr>' +
+      trow('기본급', P.payBase, C.payBase, d0) + trow('OT 금액 계', P.payWd + P.payHd, C.payWd + C.payHd, d0) +
+      '<tr class="tot"><td>월급여 합계</td>' + dcell(P.pay, C.pay, d0) + '<td class="n">' + pct(P.pay, C.pay) + '</td></tr>' +
+      '</tbody></table></section>';
+
+    // 4. 작업자별
+    html += '<section><h2>4. 작업자별 OT 증감</h2><table class="rp-t rp-small"><thead><tr><th rowspan="2">No</th><th rowspan="2">성명</th><th colspan="3">평일 OT (h)</th><th colspan="3">휴일 OT (h)</th><th rowspan="2">OT 금액<br>증감</th><th colspan="2">평일 OT 증감 요인</th><th rowspan="2">비고</th></tr>' +
+      '<tr><th>전달</th><th>이번 달</th><th>증감</th><th>전달</th><th>이번 달</th><th>증감</th><th>일수</th><th>패턴</th></tr></thead><tbody>';
+    var tot = { pw: 0, cw: 0, ph: 0, ch: 0, d$: 0, de: 0, pe: 0 };
+    r.rows.forEach(function (x, i) {
+      if (x.status !== 'both') {
+        var w = x.c || x.p;
+        html += '<tr><td class="n">' + (i + 1) + '</td><td>' + esc(w.name) + '</td><td colspan="9" class="sm">' + (x.status === 'new' ? '이번 달 신규' : '이번 달 명단에 없음') + '</td><td class="sm">' + (x.status === 'new' ? '신규' : '제외') + '</td></tr>';
+        return;
+      }
+      var d$ = (x.c.sheet.payWd + x.c.sheet.payHd) - (x.p.sheet.payWd + x.p.sheet.payHd);
+      tot.pw += x.p.sheet.wdTot; tot.cw += x.c.sheet.wdTot; tot.ph += x.p.sheet.hdTot; tot.ch += x.c.sheet.hdTot; tot.d$ += d$; tot.de += x.wdDaysEffect; tot.pe += x.wdPatternEffect;
+      var note = x.tags.map(function (t) { return t.t; }).concat(x.notes).join(', ');
+      html += '<tr' + (x.tags.some(function (t) { return t.s === 'alert'; }) ? ' class="flag"' : '') + '><td class="n">' + (i + 1) + '</td><td>' + esc(x.name) + '</td>' +
+        dcell(x.p.sheet.wdTot, x.c.sheet.wdTot, h) + dcell(x.p.sheet.hdTot, x.c.sheet.hdTot, h) +
+        '<td class="n">' + sgn(d$, function (v) { return '$' + v.toFixed(2); }) + '</td><td class="n">' + sgn(x.wdDaysEffect, h) + '</td><td class="n">' + sgn(x.wdPatternEffect, h) + '</td><td class="sm">' + esc(note) + '</td></tr>';
+    });
+    html += '<tr class="tot"><td></td><td>합계</td>' + dcell(tot.pw, tot.cw, h) + dcell(tot.ph, tot.ch, h) + '<td class="n">' + sgn(tot.d$, function (v) { return '$' + v.toFixed(2); }) + '</td><td class="n">' + sgn(tot.de, h) + '</td><td class="n">' + sgn(tot.pe, h) + '</td><td></td></tr>';
+    html += '</tbody></table><p class="rp-foot">일수 = 근무일수 효과(전달 1일 평균 OT × 이번 달 근무일수 − 전달 OT), 패턴 = 하루 OT 시간 변화로 생긴 차이. 음영 행은 시간대·OT 패턴이 바뀐 작업자.</p></section>';
+
+    // 5. 근무 시간대 변경
+    var sh = both.filter(function (x) { return x.wdShift.changed || x.hdShift.changed || Math.abs(x.wdPerDayDelta) >= 0.25; });
+    html += '<section><h2>5. 근무 시간대 변경 내역</h2>';
+    if (!sh.length) html += '<p class="rp-p">평일·휴일 출퇴근 시간대가 바뀐 작업자는 없습니다.</p>';
+    else {
+      html += '<table class="rp-t rp-small"><thead><tr><th>성명</th><th>구분</th><th>' + esc(r.label.p) + ' (출근–퇴근 · 일수)</th><th>' + esc(r.label.c) + ' (출근–퇴근 · 일수)</th><th>1일 평균 평일 OT</th></tr></thead><tbody>';
+      sh.forEach(function (x) {
+        var dist = function (d) { return d.slice(0, 3).map(function (e) { return e.key + ' · ' + e.n + '일'; }).join('<br>') || '—'; };
+        var rows = [['평일', x.p.A.wdDist, x.c.A.wdDist]];
+        if (x.hdShift.changed) rows.push(['휴일', x.p.A.hdDist, x.c.A.hdDist]);
+        rows.forEach(function (q, k) {
+          html += '<tr>' + (k === 0 ? '<td rowspan="' + rows.length + '">' + esc(x.name) + '</td>' : '') + '<td>' + q[0] + '</td><td class="sm mono">' + dist(q[1]) + '</td><td class="sm mono">' + dist(q[2]) + '</td>' +
+            (k === 0 ? '<td class="n" rowspan="' + rows.length + '">' + fixed(x.p.A.wdOtPerDay, 2) + 'h → ' + fixed(x.c.A.wdOtPerDay, 2) + 'h<br><span class="' + (x.wdPerDayDelta > 0 ? 'up' : 'dn') + '">' + sgn(x.wdPerDayDelta, function (v) { return v.toFixed(2); }) + 'h</span></td>' : '') + '</tr>';
+        });
+      });
+      html += '</tbody></table>';
+    }
+    html += '</section>';
+
+    // 6. 확인 필요 사항
+    var items = [];
+    r.prev.warnings.forEach(function (w) { items.push('[' + r.label.p + '] ' + w); });
+    r.cur.warnings.forEach(function (w) { items.push('[' + r.label.c + '] ' + w); });
+    both.forEach(function (x) {
+      var A = x.c.A, list = A.checks.slice();
+      A.gaps.forEach(function (g) { if (A.bwMissing.indexOf(g.d) < 0) list.push(g.d + '일 출퇴근 ' + fm(g.inM) + '–' + fm(g.outM) + '(' + g.span + 'h)인데 기록 합계 ' + g.rec + 'h'); });
+      if (A.manualAdj) list.push('기본급 포함 B/O 수식 수동 조정 =' + A.manualAdj + ' → ' + A.builtinSheet + 'h' + (A.builtinExpected === A.builtinSheet ? ' (근무일 기준과 일치)' : ' (근무일 기준 ' + A.builtinExpected + 'h와 불일치)'));
+      x.notes.forEach(function (n) { list.push(n); });
+      if (Math.abs(x.c.rate - x.p.rate) > 1e-6) list.push('시급 ' + x.p.rate + ' → ' + x.c.rate);
+      list.forEach(function (t) { items.push(x.name + ': ' + t); });
+    });
+    html += '<section><h2>6. 확인 필요 사항</h2>' + (items.length ? '<ul class="rp-list num">' + items.map(function (t, i) { return '<li><span class="k">' + (i + 1) + '.</span><span>' + esc(t) + '</span></li>'; }).join('') + '</ul>' : '<p class="rp-p">시트 계산과 일별 기록에서 이상이 발견되지 않았습니다.</p>') + '</section>';
+
+    // 7. 의견
+    html += '<section><h2>7. 검토 의견</h2><div class="ed rp-op" contenteditable="true" data-memo="opinion" data-ph="검토 의견을 입력하세요 (인쇄 시 빈칸이면 줄만 표시됩니다)">' + esc(memo.opinion).replace(/\n/g, '<br>') + '</div></section>';
+
+    html += '<footer class="rp-end"><span>자료: ' + esc(r.prev.fileName) + ' / ' + esc(r.cur.fileName) + '</span><span>휴일 기준: 휴일 OT 수식 지정일 · 평일 OT = B/O − 기본급 포함분 + 평일 E/O</span></footer>';
+    return html + '</article>';
+  }
+
+  function bind() {
+    document.querySelectorAll('#report [data-memo]').forEach(function (el) {
+      el.addEventListener('input', function () {
+        var k = el.getAttribute('data-memo'); memo[k] = el.innerText.trim();
+        try { if (k !== 'opinion') localStorage.setItem('tcnot.' + k, memo[k]); } catch (e) {}
+        el.classList.toggle('empty', !memo[k]);
+      });
+      el.classList.toggle('empty', !el.innerText.trim());
+    });
+  }
+
+  function toExcel(r, X) {
+    if (typeof XLSX === 'undefined') return;
+    var wb = XLSX.utils.book_new(), F = X.getFindings(r);
+    var strip = function (s) { return String(s).replace(/<br\s*\/?>/g, '\n').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"'); };
+    var R2 = function (v) { return Math.round(v * 100) / 100; };
+    var P = r.P, C = r.C;
+    var sum = [[(X.zone ? X.zone + ' ' : '') + 'OT 월간 비교 보고서'], ['비교 기간', r.label.p + ' → ' + r.label.c], ['작성자', memo.author], ['작성일', today()], [],
+      ['요약']].concat(F.map(function (f) { return [f[0], strip(f[1])]; })).concat([[],
+      ['항목', r.label.p, r.label.c, '증감'],
+      ['평일', r.prev.weekdays, r.cur.weekdays, r.cur.weekdays - r.prev.weekdays],
+      ['휴일', r.prev.holidays.length, r.cur.holidays.length, r.cur.holidays.length - r.prev.holidays.length],
+      ['평일 OT (h)', P.wdOt, C.wdOt, R2(C.wdOt - P.wdOt)], ['평일 OT 1.5배 (h)', P.wd15, C.wd15, R2(C.wd15 - P.wd15)], ['평일 OT 2배 (h)', P.wd2, C.wd2, R2(C.wd2 - P.wd2)],
+      ['평일 OT 금액 ($)', R2(P.payWd), R2(C.payWd), R2(C.payWd - P.payWd)],
+      ['휴일 OT (h)', P.hdOt, C.hdOt, R2(C.hdOt - P.hdOt)], ['휴일 OT 금액 ($)', R2(P.payHd), R2(C.payHd), R2(C.payHd - P.payHd)],
+      ['기본급 ($)', R2(P.payBase), R2(C.payBase), R2(C.payBase - P.payBase)], ['월급여 합계 ($)', R2(P.pay), R2(C.pay), R2(C.pay - P.pay)], ['인원', P.head, C.head, C.head - P.head]]);
+    if (memo.opinion) sum.push([], ['검토 의견', memo.opinion]);
+    var ws1 = XLSX.utils.aoa_to_sheet(sum); ws1['!cols'] = [{ wch: 18 }, { wch: 90 }, { wch: 14 }, { wch: 12 }];
+    XLSX.utils.book_append_sheet(wb, ws1, '요약');
+
+    var wk = [['No', '사번', '성명', '평일 OT 전달', '평일 OT 이번달', '평일 OT 증감', '휴일 OT 전달', '휴일 OT 이번달', '휴일 OT 증감', 'OT 금액 전달($)', 'OT 금액 이번달($)', 'OT 금액 증감($)', '평일 근무일 전달', '평일 근무일 이번달', '근무일수 효과(h)', '패턴 효과(h)', '평일 주 시간대 전달', '평일 주 시간대 이번달', '비고']];
+    r.rows.forEach(function (x, i) {
+      var w = x.c || x.p;
+      if (x.status !== 'both') { wk.push([i + 1, w.id, w.name, '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', x.status === 'new' ? '이번 달 신규' : '이번 달 명단에 없음']); return; }
+      var po = x.p.sheet.payWd + x.p.sheet.payHd, co = x.c.sheet.payWd + x.c.sheet.payHd;
+      wk.push([i + 1, w.id, w.name, x.p.sheet.wdTot, x.c.sheet.wdTot, R2(x.dWdOt), x.p.sheet.hdTot, x.c.sheet.hdTot, R2(x.dHdOt), R2(po), R2(co), R2(co - po), x.p.A.wdDays, x.c.A.wdDays, R2(x.wdDaysEffect), R2(x.wdPatternEffect),
+        x.wdShift.pMain ? x.wdShift.pMain.key : '', x.wdShift.cMain ? x.wdShift.cMain.key : '', x.tags.map(function (t) { return t.t; }).concat(x.notes).join(', ')]);
+    });
+    var ws2 = XLSX.utils.aoa_to_sheet(wk); ws2['!cols'] = wk[0].map(function (c, i) { return { wch: i === 2 ? 26 : i >= 16 ? 18 : 12 }; });
+    XLSX.utils.book_append_sheet(wb, ws2, '작업자별');
+
+    var chk = [['성명', '내용']];
+    r.rows.filter(function (x) { return x.status === 'both'; }).forEach(function (x) {
+      var A = x.c.A;
+      A.checks.forEach(function (t) { chk.push([x.name, t]); });
+      A.gaps.forEach(function (g) { if (A.bwMissing.indexOf(g.d) < 0) chk.push([x.name, g.d + '일 출퇴근 ' + X.fm(g.inM) + '–' + X.fm(g.outM) + '(' + g.span + 'h)인데 기록 합계 ' + g.rec + 'h']); });
+      if (A.manualAdj) chk.push([x.name, '기본급 포함 B/O 수식 수동 조정 =' + A.manualAdj]);
+      x.notes.forEach(function (n) { chk.push([x.name, n]); });
+    });
+    var ws3 = XLSX.utils.aoa_to_sheet(chk); ws3['!cols'] = [{ wch: 26 }, { wch: 90 }];
+    XLSX.utils.book_append_sheet(wb, ws3, '확인사항');
+
+    var fname = 'OT_Report_' + (r.prev.year || '') + String(r.prev.month || '').padStart(2, '0') + '-' + (r.cur.year || '') + String(r.cur.month || '').padStart(2, '0') + '.xlsx';
+    var out = XLSX.write(wb, { type: 'array', bookType: 'xlsx', compression: true });
+    var blob = new Blob([out], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = fname;
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  }
+
+  return { build: build, bind: bind, toExcel: toExcel };
+})();
+
+</script>
+<script>
 (function () {
   var R = OTCore.round, fm = OTCore.fmtMin;
-  var state = { prev: null, cur: null, isSample: false, effTab: 'wd' };
+  var state = { prev: null, cur: null, isSample: false, effTab: 'wd', view: 'analysis' };
   var $ = function (id) { return document.getElementById(id); };
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function h(n) { return (Math.round(n * 10) / 10).toLocaleString('en-US', { maximumFractionDigits: 1 }); }
@@ -671,8 +968,27 @@ var SAMPLE_FILES = [{"name":"Sample_TCN_Zone_August.2026.xlsx","b64":"UEsDBBQAAA
     state.r = r;
     var zone = (c.sheetName || '').replace(/_.*$/, '');
     if (zone) $('zoneName').textContent = zone + ' · Time Sheet';
-    $('out').innerHTML = [secCalendar(r), secTotals(r), secFindings(r), secEffects(r), secShift(r), secWorkers(r), secMethod()].join('');
-    bindTabs();
+    if (state.view === 'report') { $('out').innerHTML = toolbar('report') + OTReport.build(r, reportCtx()); OTReport.bind(r, reportCtx()); bindToolbar(); window.scrollTo(0, 0); return; }
+    $('out').innerHTML = [toolbar('analysis'), secCalendar(r), secTotals(r), secFindings(r), secEffects(r), secShift(r), secWorkers(r), secMethod()].join('');
+    bindTabs(); bindToolbar();
+  }
+  function toolbar(mode) {
+    return '<div class="toolbar no-print">' + (mode === 'report'
+      ? '<button class="btn ghost" type="button" data-go="analysis">← 분석 화면</button><span class="muted">작성자·의견을 채운 뒤 인쇄하거나 저장하세요</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="print">인쇄 / PDF 저장</button></span>'
+      : '<span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 분석 결과</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="report">보고서 보기</button></span>') + '</div>';
+  }
+  function bindToolbar() {
+    document.querySelectorAll('[data-go]').forEach(function (b) {
+      b.addEventListener('click', function () {
+        var g = b.getAttribute('data-go');
+        if (g === 'report' || g === 'analysis') { state.view = g; render(); window.scrollTo(0, 0); }
+        if (g === 'print') window.print();
+        if (g === 'xlsx') OTReport.toExcel(state.r, reportCtx());
+      });
+    });
+  }
+  function reportCtx() {
+    return { zone: ($('zoneName').textContent || '').replace(/\s*·\s*Time Sheet$/, ''), getFindings: getFindings, esc: esc, h: h, usd: usd, sgn: sgn, fm: fm, isSample: state.isSample };
   }
 
   function miniCal(m) {
@@ -723,6 +1039,11 @@ var SAMPLE_FILES = [{"name":"Sample_TCN_Zone_August.2026.xlsx","b64":"UEsDBBQAAA
   }
 
   function secFindings(r) {
+    var F = getFindings(r);
+    return '<section class="block"><div class="sec-head"><h2>주요 변화</h2></div><div class="panel findings">' +
+      F.map(function (f) { return '<div class="finding"><span class="eyebrow" style="padding-top:2px">' + f[0] + '</span><p>' + f[1] + '</p></div>'; }).join('') + '</div></section>';
+  }
+  function getFindings(r) {
     var F = [];
     var both = r.rows.filter(function (x) { return x.status === 'both'; });
     // calendar
@@ -750,8 +1071,7 @@ var SAMPLE_FILES = [{"name":"Sample_TCN_Zone_August.2026.xlsx","b64":"UEsDBBQAAA
     var chk = both.filter(function (x) { return x.c.A.checks.length || x.c.A.gaps.length; });
     var warns = r.prev.warnings.concat(r.cur.warnings);
     if (chk.length || warns.length) F.push(['데이터 점검', warns.map(esc).concat(chk.map(function (x) { return '<b>' + esc(x.name) + '</b>: ' + x.c.A.checks.concat(x.c.A.gaps.filter(function (g) { return x.c.A.bwMissing.indexOf(g.d) < 0; }).map(function (g) { return g.d + '일 출퇴근 ' + fm(g.inM) + '–' + fm(g.outM) + '(' + g.span + 'h)와 기록 ' + g.rec + 'h 차이'; })).map(esc).join(' · '); })).join('<br>')]);
-    return '<section class="block"><div class="sec-head"><h2>주요 변화</h2></div><div class="panel findings">' +
-      F.map(function (f) { return '<div class="finding"><span class="eyebrow" style="padding-top:2px">' + f[0] + '</span><p>' + f[1] + '</p></div>'; }).join('') + '</div></section>';
+    return F;
   }
   function patternLine(both, k) {
     var cal = 0, pat = 0;
