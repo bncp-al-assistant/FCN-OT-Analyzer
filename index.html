@@ -399,7 +399,7 @@ details[open] .w-name .caret { transform: rotate(90deg); }
   <article class="guide" id="guide" hidden>
     <div class="g-head">
       <div>
-        <div class="eyebrow">초안 v0.1 · 관리재경팀 검토 전</div>
+        <div class="eyebrow">초안 v0.2 · 주차수당 기준 확정 반영</div>
         <h2 class="g-title">OT 산정 기준</h2>
         <p class="lede">타임시트 엑셀 수식과 7·8월 실제 기록(528건)에서 확인한 기준입니다. <span class="chip warn">확인 필요</span> 표시는 회사 규정으로 확정해야 하는 항목입니다.</p>
       </div>
@@ -410,7 +410,7 @@ details[open] .w-name .caret { transform: rotate(90deg); }
     <section class="g-sec">
       <h3><span class="g-no">1</span>한눈에 보기</h3>
       <div class="g-cards">
-        <div class="g-card"><span class="g-code">B/W</span><b>기본근무</b><span class="g-rate">1배</span><p>하루 첫 8시간. 휴일(금)에는 일하지 않아도 8h가 기록되며 이것이 <b>주차수당</b>입니다.</p></div>
+        <div class="g-card"><span class="g-code">B/W</span><b>기본근무</b><span class="g-rate">1배</span><p>하루 첫 8시간. 휴일(금)에는 일하지 않아도 8h가 기록되며 이것이 <b>주차수당</b>입니다(그 주 개근 시).</p></div>
         <div class="g-card"><span class="g-code">B/O</span><b>기본 연장</b><span class="g-rate">1.5배</span><p>평일 8시간을 넘는 다음 4시간까지. 이 중 하루 2h는 기본급에 포함됩니다.</p></div>
         <div class="g-card"><span class="g-code">E/O</span><b>추가 연장</b><span class="g-rate">2배</span><p>평일 12시간을 넘는 시간.</p></div>
         <div class="g-card hol"><span class="g-code">휴일 E/O</span><b>휴일 근무</b><span class="g-rate">2배</span><p>휴일(금)에 실제로 일한 시간 전부.</p></div>
@@ -464,7 +464,7 @@ details[open] .w-name .caret { transform: rotate(90deg); }
         <thead><tr><th>구분</th><th>시간</th><th>계산</th><th class="r">금액</th></tr></thead>
         <tbody>
           <tr><td>기본근무 (평일)</td><td>26일 × 8h = 208h</td><td>× $1.00</td><td class="r">$208.00</td></tr>
-          <tr><td>주차수당 (휴일 B/W)</td><td>5일 × 8h = 40h</td><td>× $1.00</td><td class="r">$40.00</td></tr>
+          <tr><td>주차수당 (휴일 B/W, 5주 개근)</td><td>5일 × 8h = 40h</td><td>× $1.00</td><td class="r">$40.00</td></tr>
           <tr><td>기본급 포함 B/O</td><td>26일 × 2h = 52h</td><td>× $1.00 × 1.5</td><td class="r">$78.00</td></tr>
           <tr class="g-sub-tot"><td colspan="3">기본급 소계</td><td class="r">$326.00</td></tr>
           <tr><td>평일 OT 1.5배</td><td>B/O 104h − 52h = 52h</td><td>× $1.00 × 1.5</td><td class="r">$78.00</td></tr>
@@ -493,11 +493,11 @@ details[open] .w-name .caret { transform: rotate(90deg); }
       <h3><span class="g-no">6</span>주차수당 · 특수한 경우</h3>
       <div class="g-table"><table>
         <tbody>
-          <tr><th>주차수당</th><td>휴일(금)마다 B/W 8h를 1배로 지급합니다. 현재 시트는 그 달 금요일 수만큼 지급합니다(7월 5회, 8월 4회).<br><span class="chip warn">확인 필요</span> 월 4회 상한이 있는지, 결근한 주에도 지급하는지</td></tr>
+          <tr><th>주차수당</th><td>휴일(금)마다 B/W 8h를 1배로 지급합니다. <b>주 단위</b>로 판단하며, 그 주(직전 금요일 다음날 ~ 목요일)에 <b>하루라도 결근하면 지급하지 않습니다.</b> 월 횟수 제한은 없어 금요일이 5번인 달은 개근 시 5회 지급합니다.<br><span class="muted">분석 화면에서 결근한 주에 지급된 경우 "주차수당 과지급", 개근했는데 빠진 경우 "주차수당 누락 확인"으로 표시합니다.</span></td></tr>
           <tr><th>휴일에 일한 경우</th><td>주차수당 8h(1배)는 그대로 두고, 일한 시간 전부를 휴일 E/O(2배)로 추가합니다.</td></tr>
           <tr><th>월급제</th><td>"Monthly Salary is always calculated by 30 days." 기본근무를 30일 × 8h = 240h로 고정합니다. 31일인 달에도 기본급이 같습니다. 시급 = 월급 ÷ (240h + 52h × 1.5).</td></tr>
           <tr><th>중도 퇴사</th><td>마지막 근무일까지만 B/W를 기록합니다. 기본급 포함 B/O는 실제 근무한 평일 수 × 2h로 줄입니다(시트 수식에서 <span class="mono">−28</span>처럼 조정). 근무한 주의 금요일까지만 주차수당을 지급합니다.</td></tr>
-          <tr><th>결근</th><td>그날 B/W·B/O·E/O를 모두 비웁니다. <span class="chip warn">확인 필요</span> 그 주 주차수당을 지급하는지</td></tr>
+          <tr><th>결근</th><td>그날 B/W·B/O·E/O를 모두 비웁니다. 그 주 금요일 주차수당(8h)도 지급하지 않습니다.</td></tr>
         </tbody></table></div>
     </section>
 
@@ -505,8 +505,6 @@ details[open] .w-name .caret { transform: rotate(90deg); }
     <section class="g-sec">
       <h3><span class="g-no">7</span>확정이 필요한 항목</h3>
       <ol class="g-list num">
-        <li>주차수당 월 지급 횟수: 금요일 수만큼(4~5회) 또는 월 4회 상한</li>
-        <li>결근한 주의 주차수당 지급 여부</li>
         <li>휴게시간 기준: 점심 1h(12–13시 근무 시), 저녁 1h(19시 이후까지 근무 시)</li>
         <li>B/O 상한 4h, 기본급 포함 B/O 하루 2h의 근거(계약서·취업규칙 조항)</li>
       </ol>
@@ -779,6 +777,25 @@ var OTCore = (function () {
     var nt = w.days.filter(function (x) { return x.note && /depart|resign|퇴사|exit/i.test(x.note); })[0];
     A.resignNote = nt ? nt.d + '일 "' + nt.note + '"' : '';
     if (!A.resigned && nt && nt.d > 1) { A.resigned = true; A.lastDay = nt.d - 1; }
+    // 주차수당 점검: 휴일(금)마다 직전 주(이전 휴일 다음날 ~ 휴일 전날)에 결근이 있었는지
+    var hols = month.holidays.slice().sort(function (a, b) { return a - b; });
+    var empStart = A.joined ? A.firstDay : 1, empEnd = A.resigned ? A.lastDay : n;
+    A.jucha = []; A.juchaPaid = 0;
+    hols.forEach(function (h, i) {
+      if (h < empStart || h > empEnd + 1) return;           // 재직 기간 밖의 휴일은 제외
+      if (h > empEnd) return;                               // 퇴사 이후 휴일
+      var from = i > 0 ? hols[i - 1] + 1 : Math.max(1, h - 6), absent = [];
+      for (var d = from; d < h; d++) {
+        if (d < empStart || d > empEnd) continue;
+        var x = w.days[d - 1];
+        if (!x.hol && !(x.bw > 0) && !(x.bo > 0) && !(x.eo > 0)) absent.push(d);
+      }
+      var paid = w.days[h - 1].bw > 0;
+      if (paid) A.juchaPaid++;
+      var st = paid && absent.length ? 'paid_absent' : (!paid && !absent.length ? 'unpaid_full' : 'ok');
+      A.jucha.push({ d: h, from: from, paid: paid, absent: absent, status: st, partial: i === 0 && from === 1 && h - 6 < 1 });
+    });
+    A.juchaIssues = A.jucha.filter(function (j) { return j.status !== 'ok'; });
     A.wdDist = distribution(wdList);
     A.hdDist = distribution(hdList);
     A.wdOtGrid = A.boSum + A.eoWd;               // 평일 B/O+E/O 전체 (기본 포함분 포함)
@@ -797,6 +814,10 @@ var OTCore = (function () {
     if (Math.abs(A.builtinExpected - A.builtinSheet) > 0.01) A.checks.push('기본급 포함 B/O: 평일 ' + A.wdBoDays + '일×2h = ' + A.builtinExpected + 'h 이어야 하나 시트는 ' + A.builtinSheet + 'h');
     A.manualAdj = (w.formulas.bo && /\)\s*\*\s*2\s*[-+]\s*\d+/.test(w.formulas.bo)) ? w.formulas.bo : '';
     if (A.bwMissing.length) A.checks.push(A.bwMissing.join(', ') + '일: B/O는 있는데 B/W(기본 8h)가 비어 있음');
+    A.jucha.forEach(function (j) {
+      if (j.status === 'paid_absent') A.checks.push('주차수당: ' + j.d + '일(금) 지급됐으나 그 주 ' + j.absent.join(', ') + '일 결근 → 미지급 대상');
+    });
+    A.juchaInfo = A.jucha.filter(function (j) { return j.status === 'unpaid_full'; }).map(function (j) { return '주차수당: ' + j.d + '일(금) 그 주 개근인데 B/W 8h 없음 (월급제 30일 기준이면 정상)'; });
     w.A = A;
   }
 
@@ -816,6 +837,9 @@ var OTCore = (function () {
       payBase: sum(ws, function (w) { return w.sheet.payBase; }),
       pay: sum(ws, function (w) { return w.sheet.pay; }),
       wdPersonDays: sum(ws, function (w) { return w.A.wdDays; }),
+      juchaH: sum(ws, function (w) { return w.A.juchaPaid * 8; }),
+      jucha$: sum(ws, function (w) { return w.A.juchaPaid * 8 * w.rate; }),
+      juchaIssue: sum(ws, function (w) { return w.A.jucha.filter(function (j) { return j.status === 'paid_absent'; }).length; }),
       hdPersonDays: sum(ws, function (w) { return w.A.hdDays; })
     };
   }
@@ -874,7 +898,10 @@ var OTCore = (function () {
       if (!ca.resigned && !ca.joined && ca.offDays > 0 && (ca.wdDays + ca.hdDays) < expectedDays) row.tags.push({ t: '근무 ' + (ca.wdDays + ca.hdDays) + '/' + expectedDays + '일', s: 'warn' });
       ca.statusNotes.forEach(function (n) { row.notes.push(n.d + '일 "' + n.note + '" 기재'); });
       if (Math.abs(c.rate - p.rate) > 1e-6) row.tags.push({ t: '시급 ' + round(p.rate, 3) + '→' + round(c.rate, 3), s: 'warn' });
-      if (ca.checks.length) row.tags.push({ t: '시트 계산 확인 필요', s: 'warn' });
+      var jPA = ca.jucha.filter(function (j) { return j.status === 'paid_absent'; }).length;
+      if (jPA) row.tags.push({ t: '주차수당 과지급 ' + jPA + '회', s: 'warn' });
+      if (ca.juchaInfo.length) row.tags.push({ t: '주차수당 누락 확인 ' + ca.juchaInfo.length + '회', s: 'info' });
+      if (ca.checks.length > jPA) row.tags.push({ t: '시트 계산 확인 필요', s: 'warn' });
       if (ca.gaps.length) row.tags.push({ t: '출퇴근·시간 불일치 ' + ca.gaps.length + '일', s: 'warn' });
       return row;
     });
@@ -964,7 +991,7 @@ var OTReport = (function () {
       '<tr class="grp"><td colspan="5">휴일 OT</td></tr>' +
       trow('휴일 OT 시간', P.hdOt, C.hdOt, hrs) + trow('1인·1회 평균', perHd(P), perHd(C), h2) + trow('휴일 OT 금액', P.payHd, C.payHd, d0) +
       '<tr class="grp"><td colspan="5">급여</td></tr>' +
-      trow('기본급', P.payBase, C.payBase, d0) + trow('OT 금액 계', P.payWd + P.payHd, C.payWd + C.payHd, d0) +
+      trow('기본급', P.payBase, C.payBase, d0) + trow('　주차수당 (휴일 B/W)', P.jucha$, C.jucha$, d0) + trow('OT 금액 계', P.payWd + P.payHd, C.payWd + C.payHd, d0) +
       '<tr class="tot"><td>월급여 합계</td>' + dcell(P.pay, C.pay, d0) + '<td class="n">' + pct(P.pay, C.pay) + '</td></tr>' +
       '</tbody></table></section>';
 
@@ -1017,6 +1044,7 @@ var OTReport = (function () {
       A.gaps.forEach(function (g) { if (A.bwMissing.indexOf(g.d) < 0) list.push(g.d + '일 출퇴근 ' + fm(g.inM) + '–' + fm(g.outM) + '(' + g.span + 'h)인데 기록 합계 ' + g.rec + 'h'); });
       if (A.manualAdj) list.push('기본급 포함 B/O 수식 수동 조정 =' + A.manualAdj + ' → ' + A.builtinSheet + 'h' + (A.builtinExpected === A.builtinSheet ? ' (근무일 기준과 일치)' : ' (근무일 기준 ' + A.builtinExpected + 'h와 불일치)'));
       x.notes.forEach(function (n) { list.push(n); });
+      A.juchaInfo.forEach(function (n) { list.push(n); });
       if (Math.abs(x.c.rate - x.p.rate) > 1e-6) list.push('시급 ' + x.p.rate + ' → ' + x.c.rate);
       list.forEach(function (t) { items.push(x.name + ': ' + t); });
     });
@@ -1054,7 +1082,8 @@ var OTReport = (function () {
       ['평일 OT (h)', P.wdOt, C.wdOt, R2(C.wdOt - P.wdOt)], ['평일 OT 1.5배 (h)', P.wd15, C.wd15, R2(C.wd15 - P.wd15)], ['평일 OT 2배 (h)', P.wd2, C.wd2, R2(C.wd2 - P.wd2)],
       ['평일 OT 금액 ($)', R2(P.payWd), R2(C.payWd), R2(C.payWd - P.payWd)],
       ['휴일 OT (h)', P.hdOt, C.hdOt, R2(C.hdOt - P.hdOt)], ['휴일 OT 금액 ($)', R2(P.payHd), R2(C.payHd), R2(C.payHd - P.payHd)],
-      ['기본급 ($)', R2(P.payBase), R2(C.payBase), R2(C.payBase - P.payBase)], ['월급여 합계 ($)', R2(P.pay), R2(C.pay), R2(C.pay - P.pay)], ['인원', P.head, C.head, C.head - P.head]]);
+      ['기본급 ($)', R2(P.payBase), R2(C.payBase), R2(C.payBase - P.payBase)],
+      ['주차수당 회수(연인원)', P.juchaH / 8, C.juchaH / 8, (C.juchaH - P.juchaH) / 8], ['주차수당 ($)', R2(P.jucha$), R2(C.jucha$), R2(C.jucha$ - P.jucha$)], ['월급여 합계 ($)', R2(P.pay), R2(C.pay), R2(C.pay - P.pay)], ['인원', P.head, C.head, C.head - P.head]]);
     if (memo.opinion) sum.push([], ['검토 의견', memo.opinion]);
     var ws1 = XLSX.utils.aoa_to_sheet(sum); ws1['!cols'] = [{ wch: 18 }, { wch: 90 }, { wch: 14 }, { wch: 12 }];
     XLSX.utils.book_append_sheet(wb, ws1, '요약');
@@ -1077,6 +1106,7 @@ var OTReport = (function () {
       A.gaps.forEach(function (g) { if (A.bwMissing.indexOf(g.d) < 0) chk.push([x.name, g.d + '일 출퇴근 ' + X.fm(g.inM) + '–' + X.fm(g.outM) + '(' + g.span + 'h)인데 기록 합계 ' + g.rec + 'h']); });
       if (A.manualAdj) chk.push([x.name, '기본급 포함 B/O 수식 수동 조정 =' + A.manualAdj]);
       x.notes.forEach(function (n) { chk.push([x.name, n]); });
+      A.juchaInfo.forEach(function (n) { chk.push([x.name, n]); });
     });
     var ws3 = XLSX.utils.aoa_to_sheet(chk); ws3['!cols'] = [{ wch: 26 }, { wch: 90 }];
     XLSX.utils.book_append_sheet(wb, ws3, '확인사항');
@@ -1243,7 +1273,8 @@ var OTReport = (function () {
       row('row-hol', '휴일 OT 시간', '휴일 근무 연인원 ' + P.hdPersonDays + '→' + C.hdPersonDays + '일', P.hdOt, C.hdOt, hrs) +
       row('row-hol', '휴일 OT 1인·1회 평균', '', perHd(P), perHd(C), function (x) { return x.toFixed(2) + 'h'; }) +
       row('row-hol', '휴일 OT 금액', '', P.payHd, C.payHd, usd) +
-      row('', '기본급', '', P.payBase, C.payBase, usd) +
+      row('', '기본급', '주차수당 포함', P.payBase, C.payBase, usd) +
+      row('', '주차수당 (휴일 B/W 8h)', '지급 ' + (P.juchaH / 8) + '→' + (C.juchaH / 8) + '회(연인원)', P.jucha$, C.jucha$, usd) +
       row('', '월급여 합계', '인원 ' + P.head + '→' + C.head + '명', P.pay, C.pay, usd) +
       '</tbody></table></div></section>';
   }
@@ -1286,6 +1317,11 @@ var OTReport = (function () {
     if (absent.length) lines.push('<b>근무일 부족</b>: ' + absent.map(function (x) { return esc(x.name) + '(' + (x.c.A.wdDays + x.c.A.hdDays) + '/' + r.cur.nDays + '일)'; }).join(', '));
     if (lines.length) F.push(['인원 변동', lines.join('<br>') + (res.length ? '<br>퇴사자는 이번 달 근무일만큼만 OT가 발생해 팀 OT 감소의 주요 원인이 됩니다.' : '')]);
     else F.push(['인원 변동', '퇴사·입사 인원이 없습니다.']);
+    // 주차수당
+    var paCnt = r.C.juchaIssue, infoN = r.cur.workers.reduce(function (a, w) { return a + w.A.juchaInfo.length; }, 0);
+    F.push(['주차수당', '이번 달 휴일(금) <b>' + r.cur.holidays.length + '회</b>, 지급 <b>' + (r.C.juchaH / 8) + '회(연인원)</b> · ' + usd(r.C.jucha$) + ' (전달 ' + (r.P.juchaH / 8) + '회 · ' + usd(r.P.jucha$) + '). ' +
+      (paCnt ? '<b>결근한 주에 지급된 ' + paCnt + '건</b>이 있습니다. ' : '결근한 주에 지급된 건은 없습니다. ') +
+      (infoN ? '개근했는데 빠진 ' + infoN + '건은 월급제(30일 기준) 여부를 확인하세요.' : '')]);
     // checks
     var chk = both.filter(function (x) { return x.c.A.checks.length || x.c.A.gaps.length; });
     var warns = r.prev.warnings.concat(r.cur.warnings);
@@ -1441,6 +1477,7 @@ var OTReport = (function () {
       var items = [];
       x.notes.forEach(function (n) { items.push(esc(n)); });
       c.A.checks.forEach(function (n) { items.push(esc(n)); });
+      c.A.juchaInfo.forEach(function (n) { items.push(esc(n)); });
       c.A.gaps.forEach(function (g) { if (c.A.bwMissing.indexOf(g.d) < 0) items.push(g.d + '일: 출퇴근 ' + fm(g.inM) + '–' + fm(g.outM) + '(' + g.span + 'h)인데 기록 합계 ' + g.rec + 'h'); });
       if (c.A.manualAdj) items.push('기본급 포함 B/O 수식이 수동 조정됨: =' + esc(c.A.manualAdj) + ' → ' + c.A.builtinSheet + 'h (B/W·B/O가 모두 있는 평일 ' + c.A.wdBoDays + '일×2h = ' + c.A.builtinExpected + 'h' + (c.A.builtinExpected === c.A.builtinSheet ? ', 일치' : ', 불일치') + ')');
       if (Math.abs(c.rate - p.rate) > 1e-6) items.push('시급 ' + R(p.rate, 4) + ' → ' + R(c.rate, 4));
@@ -1458,6 +1495,7 @@ var OTReport = (function () {
       '<li>평일 OT = 시트의 "평일근무 OT 합계"(B/O − 기본급 포함분 + 평일 E/O). 휴일 OT = "휴일근무 OT 합계"(휴일 E/O).</li>' +
       '<li>휴일은 휴일 OT 수식(예: =L8+S8+Z8+AG8)에 들어간 날짜로 판단하고, B/O가 비어 있는 날과 다르면 경고합니다.</li>' +
       '<li>휴일에는 B/W 8h가 일괄 기재되므로, 휴일 근무 여부는 E/O 유무로 셉니다.</li>' +
+      '<li>주차수당: 휴일(금) B/W 8h. 그 주(직전 휴일 다음날~휴일 전날)에 하루라도 결근(B/W·B/O·E/O 모두 공란)하면 미지급 대상, 횟수 제한 없음. 결근 주 지급은 "과지급", 개근 주 미지급은 "누락 확인"으로 표시합니다.</li>' +
       '<li>근무일수 효과 = 전달 1일 평균 OT × 이번 달 근무일수 − 전달 OT. 패턴 효과 = 나머지(하루 OT 시간 변화).</li>' +
       '<li>시간대 변경 판정: 가장 많은 출퇴근 조합이 바뀌었거나, 한 조합의 비중이 15%p 이상 바뀐 경우. 평일 1일 평균 OT가 0.25h 이상 바뀌면 따로 표시합니다.</li>' +
       '<li>파일은 이 브라우저 안에서만 읽고, 어디에도 업로드하지 않습니다.</li></ul></div></section>';
