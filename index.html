@@ -440,6 +440,7 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
 .g-check { display: inline-flex; gap: 6px; align-items: center; font-size: .86rem; color: var(--ink-2); padding-bottom: 7px; cursor: pointer; }
 .g-check input { width: 16px; height: 16px; accent-color: var(--accent); }
 .g-check:has(input:disabled) { opacity: .45; cursor: default; }
+.b-meal-eo { background: var(--b5); color: var(--bg); outline: 2px dashed var(--ink); outline-offset: -2px; }
 </style>
 </head>
 <body>
@@ -504,7 +505,7 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
   <article class="guide" id="guide" hidden>
     <div class="g-head">
       <div>
-        <div class="eyebrow">v0.4 · 회사 기준(시급제·월급제·공휴일·식사시간 근무) 반영</div>
+        <div class="eyebrow">v0.5 · 회사 기준(시급제·월급제·공휴일·식사시간 근무) 반영</div>
         <h2 class="g-title">OT 산정 기준</h2>
         <p class="lede">타임시트 엑셀 수식과 7·8월 실제 기록(528건)에서 확인한 기준입니다. <span class="chip warn">확인 필요</span> 표시는 회사 규정으로 확정해야 하는 항목입니다.</p>
       </div>
@@ -528,7 +529,7 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
       <p>출근부터 퇴근까지의 시간에서 휴게시간을 빼고, 앞에서부터 순서대로 B/W → B/O → E/O에 채웁니다.</p>
       <ul class="g-list">
         <li><b>휴게시간</b>: 점심 1h(12:00–13:00에 근무 중이면), 저녁 1h(19:00 이후까지 근무하면). <span class="chip warn">확인 필요</span> 시각 기준은 실제 기록과 모두 일치합니다.</li>
-        <li><b>식사시간에 일한 경우</b>: 점심·저녁 시간에 일하면 그 1시간은 휴게로 빼지 않고 <b>B/O(1.5배)</b>로 추가합니다. 아래 순서(B/W → B/O → E/O)와 별도로 더합니다.</li>
+        <li><b>식사시간에 일한 경우(평일)</b>: 그 1시간은 휴게로 빼지 않고 <b>B/O(1.5배)</b>로 넣습니다. 단 B/O는 하루 <b>4시간 한도</b>라, 4시간이 이미 채워졌으면 <b>E/O(2배)</b>로 넘어갑니다.</li>
         <li><b>평일</b>: 8h까지 B/W, 다음 4h까지 B/O, 나머지는 E/O</li>
         <li><b>휴일(금)</b>: 일한 시간 전부 E/O. 이와 별도로 B/W 8h(주차수당)가 기록됩니다.</li>
       </ul>
@@ -537,19 +538,23 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
           <div class="g-bar" aria-label="평일 06:00부터 23:00까지 17시간: 휴게 2, B/W 8, B/O 4, E/O 3">
             <i class="b-bw" style="flex:6">B/W 6h</i><i class="b-br" style="flex:1">점심</i><i class="b-bw" style="flex:2">B/W 2h</i><i class="b-bo" style="flex:4">B/O 4h</i><i class="b-br" style="flex:1">저녁</i><i class="b-eo" style="flex:3">E/O 3h</i>
           </div><span class="g-bar-sum">17h − 휴게 2h = <b>15h</b><br><small>B/W 8 · B/O 4 · E/O 3</small></span></div>
-        <div class="g-bar-row"><span class="g-bar-lab">평일 · 점심 근무<br><small>06:00–23:00</small></span>
-          <div class="g-bar" aria-label="평일 06:00부터 23:00까지, 점심시간에 근무: 저녁 휴게 1, B/W 8, B/O 4, 점심 근무 B/O 1, E/O 3">
-            <i class="b-bw" style="flex:6">B/W 6h</i><i class="b-meal" style="flex:1">B/O</i><i class="b-bw" style="flex:2">B/W 2h</i><i class="b-bo" style="flex:4">B/O 4h</i><i class="b-br" style="flex:1">저녁</i><i class="b-eo" style="flex:3">E/O 3h</i>
-          </div><span class="g-bar-sum">17h − 휴게 1h = <b>16h</b><br><small>B/W 8 · B/O 4+<b>1</b> · E/O 3</small></span></div>
         <div class="g-bar-row"><span class="g-bar-lab">평일<br><small>07:00–18:00</small></span>
           <div class="g-bar" aria-label="평일 07:00부터 18:00까지 11시간: 휴게 1, B/W 8, B/O 2">
             <i class="b-bw" style="flex:5">B/W 5h</i><i class="b-br" style="flex:1">점심</i><i class="b-bw" style="flex:3">B/W 3h</i><i class="b-bo" style="flex:2">B/O 2h</i><i class="b-none" style="flex:6"></i>
           </div><span class="g-bar-sum">11h − 휴게 1h = <b>10h</b><br><small>B/W 8 · B/O 2</small></span></div>
+        <div class="g-bar-row"><span class="g-bar-lab">평일 · 점심 근무<br><small>07:00–18:00</small></span>
+          <div class="g-bar" aria-label="평일 07:00부터 18:00까지 점심시간 근무: B/W 8, B/O 2, 점심 근무 B/O 1">
+            <i class="b-bw" style="flex:5">B/W 5h</i><i class="b-meal" style="flex:1">B/O</i><i class="b-bw" style="flex:3">B/W 3h</i><i class="b-bo" style="flex:2">B/O 2h</i><i class="b-none" style="flex:6"></i>
+          </div><span class="g-bar-sum">11h, 휴게 없음 = <b>11h</b><br><small>B/W 8 · B/O 2+<b>1</b> = 3 (한도 안)</small></span></div>
+        <div class="g-bar-row"><span class="g-bar-lab">평일 · 점심 근무<br><small>06:00–23:00</small></span>
+          <div class="g-bar" aria-label="평일 06:00부터 23:00까지 점심시간 근무: B/W 8, B/O 4, 저녁 휴게 1, E/O 3, 점심 근무는 B/O 한도 초과로 E/O 1">
+            <i class="b-bw" style="flex:6">B/W 6h</i><i class="b-meal-eo" style="flex:1">E/O</i><i class="b-bw" style="flex:2">B/W 2h</i><i class="b-bo" style="flex:4">B/O 4h</i><i class="b-br" style="flex:1">저녁</i><i class="b-eo" style="flex:3">E/O 3h</i>
+          </div><span class="g-bar-sum">17h − 휴게 1h = <b>16h</b><br><small>B/W 8 · B/O 4(한도) · E/O 3+<b>1</b></small></span></div>
         <div class="g-bar-row"><span class="g-bar-lab">휴일(금)<br><small>06:00–22:00</small></span>
           <div class="g-bar" aria-label="휴일 06:00부터 22:00까지 16시간: 휴게 2, 휴일 E/O 14">
             <i class="b-hd" style="flex:6">E/O 6h</i><i class="b-br" style="flex:1">점심</i><i class="b-hd" style="flex:6">E/O 6h</i><i class="b-br" style="flex:1">저녁</i><i class="b-hd" style="flex:2">2h</i><i class="b-none" style="flex:1"></i>
           </div><span class="g-bar-sum">16h − 휴게 2h = <b>14h</b><br><small>휴일 E/O 14 (+주차 B/W 8)</small></span></div>
-        <div class="g-legend"><span><i class="b-bw"></i>B/W 1배</span><span><i class="b-bo"></i>B/O 1.5배</span><span><i class="b-eo"></i>E/O 2배</span><span><i class="b-hd"></i>휴일 E/O 2배</span><span><i class="b-meal"></i>식사시간 근무 → B/O 1.5배</span><span><i class="b-br"></i>휴게(무급)</span></div>
+        <div class="g-legend"><span><i class="b-bw"></i>B/W 1배</span><span><i class="b-bo"></i>B/O 1.5배</span><span><i class="b-eo"></i>E/O 2배</span><span><i class="b-hd"></i>휴일 E/O 2배</span><span><i class="b-meal"></i>식사시간 근무 → B/O 1.5배</span><span><i class="b-meal-eo"></i>B/O 4h 초과분 → E/O 2배</span><span><i class="b-br"></i>휴게(무급)</span></div>
       </div>
     </section>
 
@@ -564,7 +569,7 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
           <tr><td><b>휴일 OT</b></td><td>휴일 E/O 합계 × 시급 × 2</td><td class="mono">AU = AQ×D×2</td></tr>
           <tr class="g-tot"><td><b>월급여</b></td><td>기본급 + 평일 OT + 휴일 OT + 보너스</td><td class="mono">AR</td></tr>
         </tbody></table></div>
-      <p class="muted g-note">B/O는 모두 1.5배입니다. 하루 4h 중 2h는 "기본급"에, 나머지 2h는 "평일 OT"에 들어가며, 들어가는 칸만 다릅니다. 식사시간에 일한 시간도 B/O로 더해져 평일 OT(1.5배)에 들어갑니다.</p>
+      <p class="muted g-note">B/O는 모두 1.5배입니다. 하루 4h 중 2h는 "기본급"에, 나머지 2h는 "평일 OT"에 들어가며, 들어가는 칸만 다릅니다. 식사시간에 일한 시간은 B/O 4시간 한도 안에서 평일 OT 1.5배, 넘는 부분은 2배로 들어갑니다.</p>
     </section>
 
     <!-- 4 -->
@@ -2035,14 +2040,17 @@ var OTReconUI = (function () {
       rows = [['주차수당 B/W', bw, 1], ['휴일 E/O', eo, 2]];
     } else {
       bw = Math.min(8, work); bo = Math.min(4, Math.max(0, work - 8)); eo = Math.max(0, work - 12);
+      // 식사시간 근무: B/O 하루 4h 한도 안에서 B/O, 넘치면 E/O
+      var mealBo = Math.min(mealWork, Math.max(0, 4 - bo)), mealEo = mealWork - mealBo;
       rows = [['B/W 기본근무', bw, 1], ['B/O 기본 연장', bo, 1.5]];
-      if (mealWork) rows.push(['B/O 식사시간 근무', mealWork, 1.5]);
+      if (mealBo) rows.push(['B/O 식사시간 근무', mealBo, 1.5]);
       rows.push(['E/O 추가 연장', eo, 2]);
+      if (mealEo) rows.push(['E/O 식사시간 근무 (B/O 4h 초과)', mealEo, 2]);
     }
     var total = 0;
     var body = rows.map(function (r) { var m = r[1] * rate * r[2]; total += m; return '<tr><td>' + r[0] + '</td><td class="r mono">' + hh(r[1]) + 'h</td><td class="r mono">× ' + r[2] + '</td><td class="r mono">' + money(m) + '</td></tr>'; }).join('');
     out.innerHTML =
-      '<p class="g-calc-line">근무 <b>' + hh(span) + 'h</b> − 휴게 <b>' + brk + 'h</b>' + (lunch || dinner ? ' (' + [lunch ? '점심' + ($('cLunch').checked ? ' 근무' : '') : '', dinner ? '저녁' + ($('cDinner').checked ? ' 근무' : '') : ''].filter(Boolean).join('·') + ')' : '') + ' = 실근무 <b>' + hh(work + mealWork) + 'h</b>' + (mealWork && !hol ? ' · 식사시간 근무 ' + mealWork + 'h는 B/O(1.5배)' : '') + (hol ? ' · 휴일은 실근무 전부 E/O' : '') + '</p>' +
+      '<p class="g-calc-line">근무 <b>' + hh(span) + 'h</b> − 휴게 <b>' + brk + 'h</b>' + (lunch || dinner ? ' (' + [lunch ? '점심' + ($('cLunch').checked ? ' 근무' : '') : '', dinner ? '저녁' + ($('cDinner').checked ? ' 근무' : '') : ''].filter(Boolean).join('·') + ')' : '') + ' = 실근무 <b>' + hh(work + mealWork) + 'h</b>' + (mealWork && !hol ? ' · 식사시간 근무 ' + mealWork + 'h는 B/O(1.5배), 단 B/O 4h 한도를 넘으면 E/O(2배)' : '') + (hol ? ' · 휴일은 실근무 전부 E/O' : '') + '</p>' +
       '<div class="g-table"><table><thead><tr><th>구분</th><th class="r">시간</th><th class="r">배율</th><th class="r">금액</th></tr></thead><tbody>' + body +
       '<tr class="g-tot"><td colspan="3">하루 합계' + (hol ? '' : ' <span class="muted">(B/O 중 2h는 월 계산 때 기본급으로 분류)</span>') + '</td><td class="r mono">' + money(total) + '</td></tr></tbody></table></div>';
   }
