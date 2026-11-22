@@ -215,7 +215,7 @@ details[open] .w-name .caret { transform: rotate(90deg); }
 .report h2 { font-size: 11.5pt; font-weight: 700; color: var(--p-acc); border-bottom: 1.5px solid var(--p-acc); padding-bottom: 3px; margin-bottom: 8px; }
 .report section { break-inside: auto; }
 .report section > h2 { break-after: avoid; }
-.rp-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6mm; align-items: end; border-bottom: 2.5px solid var(--p-ink); padding-bottom: 5mm; }
+.rp-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6mm; align-items: end; border-bottom: 2.5px solid var(--p-ink); padding-bottom: 5mm; }
 .rp-title { min-width: 0; flex: 1 1 auto; }
 .rp-sign { flex: none; width: auto; }
 .rp-kicker { font-family: var(--font-num); font-size: 9pt; color: var(--p-ink2); letter-spacing: .04em; }
@@ -967,15 +967,15 @@ var OTReport = (function () {
     function dcell(a, b, f) { var d = b - a; return '<td class="n">' + f(a) + '</td><td class="n">' + f(b) + '</td><td class="n ' + (Math.abs(d) < 0.005 ? 'z' : d > 0 ? 'up' : 'dn') + '">' + sgn(d, f) + '</td>'; }
     function pct(a, b) { return a ? sgn((b - a) / a * 100, function (x) { return x.toFixed(1) + '%'; }) : '—'; }
 
-    var title = (X.zone ? X.zone + ' ' : '') + 'OT 월간 비교 보고서';
+    var title = (X.zone ? X.zone + ' ' : '') + 'OT 월간 비교 요약본';
     var html = '<article class="report" id="report">';
 
     // 머리글 + 결재란
     html += '<header class="rp-head"><div class="rp-title"><div class="rp-kicker">' + esc(r.label.p) + ' → ' + esc(r.label.c) + '</div><h1>' + esc(title) + '</h1>' +
       '<table class="rp-meta"><tr><th>작성 부서</th><td><span class="ed" contenteditable="true" data-memo="dept">' + esc(memo.dept) + '</span></td><th>작성일</th><td>' + today() + '</td></tr>' +
       '<tr><th>작성자</th><td><span class="ed" contenteditable="true" data-memo="author" data-ph="이름 입력">' + esc(memo.author) + '</span></td><th>대상 인원</th><td>' + P.head + '명 → ' + C.head + '명</td></tr></table></div>' +
-      '<table class="rp-sign"><tr><th rowspan="2" class="v">결<br>재</th><th>담당</th><th>검토</th><th>승인</th></tr><tr><td></td><td></td><td></td></tr></table></header>';
-    if (X.isSample) html += '<p class="rp-sample">※ 예시 데이터(익명)로 만든 보고서입니다.</p>';
+      '</header>';
+    if (X.isSample) html += '<p class="rp-sample">※ 예시 데이터(익명)로 만든 요약본입니다.</p>';
 
     // 1. 요약
     var F = X.getFindings(r);
@@ -1085,7 +1085,7 @@ var OTReport = (function () {
     var strip = function (s) { return String(s).replace(/<br\s*\/?>/g, '\n').replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"'); };
     var R2 = function (v) { return Math.round(v * 100) / 100; };
     var P = r.P, C = r.C;
-    var sum = [[(X.zone ? X.zone + ' ' : '') + 'OT 월간 비교 보고서'], ['비교 기간', r.label.p + ' → ' + r.label.c], ['작성자', memo.author], ['작성일', today()], [],
+    var sum = [[(X.zone ? X.zone + ' ' : '') + 'OT 월간 비교 요약본'], ['비교 기간', r.label.p + ' → ' + r.label.c], ['작성자', memo.author], ['작성일', today()], [],
       ['요약']].concat(F.map(function (f) { return [f[0], strip(f[1])]; })).concat([[],
       ['항목', r.label.p, r.label.c, '증감'],
       ['평일', r.prev.weekdays, r.cur.weekdays, r.cur.weekdays - r.prev.weekdays],
@@ -1226,7 +1226,7 @@ var OTReport = (function () {
   function toolbar(mode) {
     return '<div class="toolbar no-print">' + (mode === 'report'
       ? '<button class="btn ghost" type="button" data-go="analysis">← 분석 화면</button><span class="muted">작성자·의견을 채운 뒤 인쇄하거나 저장하세요</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="print">인쇄 / PDF 저장</button></span>'
-      : '<span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 분석 결과</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="report">보고서 보기</button></span>') + '</div>';
+      : '<span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 분석 결과</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="report">비교 요약본 보기</button></span>') + '</div>';
   }
   function bindToolbar() {
     document.querySelectorAll('[data-go]').forEach(function (b) {
@@ -1760,7 +1760,7 @@ var OTReconUI = (function () {
       '<button class="btn ghost" type="button" data-rc="xlsx">엑셀로 저장</button><button class="btn" type="button" data-rc="print">인쇄 / PDF 저장</button></span></div>';
     // 인쇄용 머리글
     html += '<div class="rc-print-head print-only"><div><div class="rp-kicker">' + esc(OTCore.monthLabel(m)) + ' · ' + esc((s.sites || []).join(', ')) + '</div><h1>타임시트 · 이라크 시스템 대조 결과</h1><p>작성일 ' + today() + '</p></div>' +
-      '<table class="rp-sign"><tr><th rowspan="2" class="v">결<br>재</th><th>담당</th><th>검토</th><th>승인</th></tr><tr><td></td><td></td><td></td></tr></table></div>';
+      '</div>';
     // 판정
     html += '<section class="rc-verdict ' + verdict + '"><div class="rc-v-main"><span class="rc-v-badge">' + (verdict === 'ok' ? '일치' : verdict === 'note' ? '규정 차이' : '불일치') + '</span><div><h2>' + total + '명 중 ' + (c.ok + c.note) + '명 일치 · ' + vText + '</h2>' +
       '<p class="muted">비교 항목 6개(기본근무 · 주차수당 · 기본 O.T · 연장 O.T · 야간 O.T · 휴일근로), 사번 기준</p></div></div>' +
