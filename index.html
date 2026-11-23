@@ -488,6 +488,8 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
 .rp-shift td, .rp-shift th { padding: 3px 5px !important; }
 .rp-t td.n.sm { font-size: 10pt; }
 .rp-check th { width: 22%; }
+.rp-chg td.tm { font-size: 10.5pt; line-height: 1.45; white-space: nowrap; }
+.rp-chg td { vertical-align: middle; }
 .rp-check td { font-size: 11.5pt; }
 .report .up { color: #b3343a; } .report .dn { color: #1d7a4f; }
 .report { line-height: 1.4; gap: 3.5mm; }
@@ -1050,17 +1052,19 @@ var OTReport = (function () {
     var SM = X.getSummary(r);
     var h2f = function (v) { return v.toFixed(2) + 'h'; };
     var nm = function (arr) { return arr.length ? arr.map(esc).join(', ') : '없음'; };
-    html += '<section><h2>1. 결론 · 주요 체크사항</h2><p class="rp-concl">' + esc(SM.headline) + '</p>' +
+    html += '<section><h2>1. 결론 · 주요 체크사항</h2>' +
       '<table class="rp-t rp-check"><tbody>' +
       '<tr><th style="width:22%">신규 투입 인원</th><td class="n" style="width:9%">' + SM.joined.length + '명</td><td>' + nm(SM.joined.map(SM.joinText)) + '</td></tr>' +
       '<tr><th>퇴사 인원</th><td class="n">' + SM.resigned.length + '명</td><td>' + nm(SM.resigned.map(SM.resignText)) + '</td></tr>' +
       '<tr><th>평일 근무시간 변경</th><td class="n">' + SM.chWd.length + '명</td><td>' + nm(SM.chWd) + (SM.chWd.length ? ' → <b>근무시간대 변경 사유 확인 필요</b>' : '') + '</td></tr>' +
       '<tr><th>휴일 근무시간 변경</th><td class="n">' + SM.chHd.length + '명</td><td>' + nm(SM.chHd) + (SM.chHd.length ? ' → <b>근무시간대 변경 사유 확인 필요</b>' : '') + '</td></tr>' +
       '</tbody></table>';
-    if (SM.changes.length) html += '<table class="rp-t rp-small" style="margin-top:3mm"><colgroup><col style="width:17%"><col style="width:7%"><col style="width:30%"><col style="width:15%"><col style="width:31%"></colgroup>' +
-      '<thead><tr><th>작업자</th><th>구분</th><th>근무시간대 변화</th><th>1일 평균 OT</th><th>비고</th></tr></thead><tbody>' +
+    var dist3 = function (d) { return d.slice(0, 3).map(function (e) { return e.key + ' <b>' + e.n + '일</b>'; }).join('<br>') || '—'; };
+    if (SM.changes.length) html += '<table class="rp-t rp-small rp-chg" style="margin-top:3mm"><colgroup><col style="width:19%"><col style="width:7%"><col style="width:23%"><col style="width:23%"><col style="width:28%"></colgroup>' +
+      '<thead><tr><th>작업자</th><th>구분</th><th>' + esc(r.label.p) + ' 근무시간대</th><th>' + esc(r.label.c) + ' 근무시간대</th><th>비고</th></tr></thead><tbody>' +
       SM.changes.map(function (i) {
-        return '<tr><td>' + esc(i.x.name) + (i.x.c.A.resigned ? '<span class="rp-badge">퇴사</span>' : '') + '</td><td>' + i.kind + '</td><td class="sm mono">' + esc(X.moveText(i)) + '</td><td class="n">' + h2f(i.p) + ' → ' + h2f(i.c) + ' <span class="' + (i.d > 0 ? 'up' : 'dn') + '">(' + sgn(i.d, function (v) { return v.toFixed(2); }) + ')</span></td><td style="height:8mm"><span class="ed" contenteditable="true" data-ph="입력"></span></td></tr>';
+        var A0 = i.kind === '평일' ? i.x.p.A.wdDist : i.x.p.A.hdDist, A1 = i.kind === '평일' ? i.x.c.A.wdDist : i.x.c.A.hdDist;
+        return '<tr><td>' + esc(i.x.name) + (i.x.c.A.resigned ? '<span class="rp-badge">퇴사</span>' : '') + '</td><td>' + i.kind + '</td><td class="tm">' + dist3(A0) + '</td><td class="tm">' + dist3(A1) + '</td><td><span class="ed" contenteditable="true" data-ph="입력"></span></td></tr>';
       }).join('') + '</tbody></table>';
     html += '</section>';
 
@@ -1448,19 +1452,18 @@ var OTReport = (function () {
     var html = '<section class="block sm"><div class="sec-head"><h2>결론 · 주요 체크사항</h2><span class="muted">' + esc(r.label.p) + ' → ' + esc(r.label.c) + '</span></div>';
     var nm = function (arr) { return arr.length ? arr.map(esc).join(', ') : '없음'; };
     var chk = '근무시간대 변경 사유 확인 필요';
-    html += '<div class="sm-head ' + (S.chNames.length ? 'up' : 'flat') + '"><span class="sm-badge">' + (S.chNames.length ? '확인 필요 ' + S.chNames.length + '명' : '큰 변화 없음') + '</span><p>' + esc(S.headline) + '</p></div>';
     html += '<div class="sm-tiles">' +
       tile('신규 투입 인원', S.joined.length + '명', nm(S.joined.map(S.joinText))) +
       tile('퇴사 인원', S.resigned.length + '명', nm(S.resigned.map(S.resignText))) +
       tile('평일 근무시간 변경', S.chWd.length + '명', nm(S.chWd) + (S.chWd.length ? '<br><b>' + chk + '</b>' : ''), S.chWd.length ? 'hi' : '') +
       tile('휴일 근무시간 변경', S.chHd.length + '명', nm(S.chHd) + (S.chHd.length ? '<br><b>' + chk + '</b>' : ''), S.chHd.length ? 'hi' : '') +
       '</div>';
-    if (S.changes.length) html += '<div class="sm-lists"><div class="sm-list"><h3>근무시간이 바뀐 작업자 <span class="muted">' + S.changes.length + '건</span></h3><div class="ledger"><table><thead><tr><th>작업자</th><th style="text-align:left">구분</th><th style="text-align:left">근무시간대 변화</th><th class="num">1일 평균 OT</th><th class="num">변화</th></tr></thead><tbody>' +
+    if (S.changes.length) html += '<div class="sm-lists"><div class="sm-list"><h3>근무시간대가 바뀐 작업자 <span class="muted">' + S.changes.length + '건</span></h3><div class="ledger"><table><thead><tr><th>작업자</th><th style="text-align:left">구분</th><th style="text-align:left">' + esc(r.label.p) + ' 근무시간대</th><th style="text-align:left">' + esc(r.label.c) + ' 근무시간대</th></tr></thead><tbody>' +
       S.changes.map(function (i) {
-        var cls = i.d > 0 ? 'd-up' : 'd-down';
-        return '<tr><td>' + esc(i.x.name) + (i.x.c.A.resigned ? ' <span class="chip resign">퇴사</span>' : '') + '</td><td style="text-align:left">' + i.kind + '</td><td style="text-align:left" class="num">' + esc(moveText(i)) + '</td><td class="num">' + h2(i.p) + ' → ' + h2(i.c) + '</td><td class="num ' + cls + '"><b>' + sgn(i.d, function (v) { return v.toFixed(2); }) + 'h</b></td></tr>';
+        var A0 = i.kind === '평일' ? i.x.p.A.wdDist : i.x.p.A.hdDist, A1 = i.kind === '평일' ? i.x.c.A.wdDist : i.x.c.A.hdDist;
+        return '<tr><td style="vertical-align:top">' + esc(i.x.name) + (i.x.c.A.resigned ? ' <span class="chip resign">퇴사</span>' : '') + '</td><td style="text-align:left;vertical-align:top">' + i.kind + '</td><td style="text-align:left;vertical-align:top;line-height:1.6">' + distTxt(A0) + '</td><td style="text-align:left;vertical-align:top;line-height:1.6">' + distTxt(A1) + '</td></tr>';
       }).join('') + '</tbody></table></div></div></div>';
-    html += '<p class="muted sm-foot">기준: 주 근무시간대(출근–퇴근)가 바뀌었거나, 평일 1일 평균 OT ±0.25h · 휴일 1회 평균 OT ±0.5h 이상 바뀐 작업자.</p>';
+    html += '<p class="muted sm-foot">근무시간대는 출근–퇴근 조합별 일수(많은 순 3개). 기준: 주 근무시간대가 바뀌었거나, 하루 근무시간이 눈에 띄게 늘거나 준 작업자.</p>';
     return html + '</section>';
   }
 
