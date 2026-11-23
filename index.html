@@ -43,6 +43,8 @@ body { background: var(--bg); color: var(--ink); font-family: var(--font-ui); fo
 .wrap { max-width: 1160px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 64px; display: grid; gap: 28px; }
 h1, h2, h3 { text-wrap: balance; margin: 0; }
 h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.01em; }
+header.top h1 { font-size: 2.4rem; letter-spacing: -0.02em; line-height: 1.2; margin: 4px 0 8px; }
+@media (max-width: 700px) { header.top h1 { font-size: 1.9rem; } }
 h2 { font-size: 1.12rem; font-weight: 700; }
 h3 { font-size: .95rem; font-weight: 600; }
 .eyebrow { font-family: var(--font-num); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
@@ -508,7 +510,7 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
     <div class="drop" id="drop" data-mode="analysis">
       <div class="drop-row">
         <strong style="font-size:.9rem">타임시트 2개를 끌어다 놓기</strong>
-        <span class="sample-flag" id="sampleFlag" hidden>예시 데이터(익명)</span>
+        <span class="sample-flag" id="sampleFlag" hidden style="display:none">예시 데이터(익명)</span>
       </div>
       <div class="slots">
         <label class="slot" for="filePrev"><span class="eyebrow">전달</span><span class="mo" id="moPrev">—</span><span class="fn" id="fnPrev">파일 선택</span></label>
@@ -516,8 +518,8 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
       </div>
       <div class="drop-row">
         <span class="muted" style="font-size:.78rem">월은 파일명·시트명에서 자동 인식해 순서를 맞춥니다.</span>
-        <button type="button" class="btn ghost" id="loadSample">예시 데이터 보기</button>
-        <label class="btn" for="fileBoth">파일 2개 선택</label>
+        <button type="button" class="btn ghost" id="loadSample" style="display:none">예시 데이터 보기</button>
+        <label class="btn" for="fileBoth">비교 파일 업로드(전월, 금월 2개 파일)</label>
       </div>
       <input type="file" id="fileBoth" accept=".xlsx,.xls,.xlsm" multiple hidden>
       <input type="file" id="filePrev" accept=".xlsx,.xls,.xlsm" hidden>
@@ -536,7 +538,7 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
     <div class="drop rc-drop" id="rcDrop">
       <div class="drop-row">
         <strong style="font-size:.9rem">타임시트와 이라크 시스템 월 집계를 끌어다 놓기</strong>
-        <span class="sample-flag" id="rcSampleFlag" hidden>예시 데이터(익명)</span>
+        <span class="sample-flag" id="rcSampleFlag" hidden style="display:none">예시 데이터(익명)</span>
       </div>
       <div class="slots">
         <label class="slot" for="rcSheet"><span class="eyebrow">타임시트 (.xlsx)</span><span class="mo" id="rcSheetMo">—</span><span class="fn" id="rcSheetFn">파일 선택</span></label>
@@ -544,8 +546,8 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
       </div>
       <div class="drop-row">
         <span class="muted" style="font-size:.78rem">두 파일을 한 번에 놓아도 종류를 알아서 구분합니다. 작업자는 사번으로 맞춥니다.</span>
-        <button type="button" class="btn ghost" id="rcLoadSample">예시 데이터 보기</button>
-        <label class="btn" for="rcBoth">파일 2개 선택</label>
+        <button type="button" class="btn ghost" id="rcLoadSample" style="display:none">예시 데이터 보기</button>
+        <label class="btn" for="rcBoth">대조 파일 업로드(타임시트, 시스템 2개 파일)</label>
       </div>
       <input type="file" id="rcBoth" accept=".xlsx,.xls,.xlsm" multiple hidden>
       <input type="file" id="rcSheet" accept=".xlsx,.xls,.xlsm" hidden>
