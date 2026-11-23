@@ -265,6 +265,18 @@ details[open] .w-name .caret { transform: rotate(90deg); }
 .detail-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; padding: 16px 18px; border: 1px solid var(--rule); border-radius: 12px; background: var(--rule-2); }
 .detail-bar > div { display: grid; gap: 2px; }
 .detail-bar .btn { font-size: .95rem; padding: 10px 18px; }
+.rc-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 8mm; }
+.rc-h { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5mm; }
+.rc-h b { font-size: 13pt; } .rc-h span { font-size: 9.5pt; color: var(--p-ink2); }
+.rc-t { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.rc-t th { font-size: 9.5pt; font-weight: 600; color: var(--p-ink2); background: var(--p-head); border: 1px solid var(--p-rule); padding: 1.5px 0; text-align: center; }
+.rc-t th.fr { color: #c4561f; }
+.rc-t td { border: 1px solid var(--p-rule); text-align: center; font-size: 10.5pt; height: 5mm; padding: 0; font-family: var(--font-num); }
+.rc-t td.hd { background: #fbe1cf; color: #b3471a; font-weight: 700; }
+.rc-s { display: flex; flex-wrap: wrap; gap: 2mm 5mm; margin-top: 2mm; font-size: 10.5pt; }
+.rc-s b { font-size: 12pt; } .rc-s .hdx b { color: #b3471a; }
+.rc-s .z { color: var(--p-ink2); }
+.rc-n { font-size: 9pt; color: var(--p-ink2); margin-top: 1mm; }
 @page { size: A3 portrait; margin: 12mm 12mm; }
 @media print {
   :root, body { background: #fff !important; color-scheme: light; }
@@ -466,7 +478,10 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
 .report h1 { font-size: 22pt; }
 .report h2 { font-size: 14pt; }
 .rp-meta { font-size: 10.5pt; }
-.rp-concl { font-size: 13pt !important; }
+.rp-head { padding-bottom: 3mm !important; }
+.report h1 { margin: 0 0 4px !important; }
+.rp-meta th, .rp-meta td { padding: 2px 8px !important; }
+.rp-concl { font-size: 13pt !important; padding: 2.5mm 4mm !important; }
 .rp-shift td.mono { font-size: 9.2pt !important; }
 .rp-shift td.n, .rp-shift td.cost { font-size: 9.4pt !important; }
 .rp-shift td.cost .pv { font-size: 8.6pt !important; }
@@ -475,7 +490,7 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
 .rp-check th { width: 22%; }
 .rp-check td { font-size: 11.5pt; }
 .report .up { color: #b3343a; } .report .dn { color: #1d7a4f; }
-.report { line-height: 1.4; gap: 5mm; }
+.report { line-height: 1.4; gap: 3.5mm; }
 .rp-shift td.cost { line-height: 1.22 !important; }
 .rp-t th, .rp-t td { padding-top: 2px; padding-bottom: 2px; }
 </style>
@@ -1045,7 +1060,7 @@ var OTReport = (function () {
     if (SM.changes.length) html += '<table class="rp-t rp-small" style="margin-top:3mm"><colgroup><col style="width:17%"><col style="width:7%"><col style="width:30%"><col style="width:15%"><col style="width:31%"></colgroup>' +
       '<thead><tr><th>작업자</th><th>구분</th><th>근무시간대 변화</th><th>1일 평균 OT</th><th>비고</th></tr></thead><tbody>' +
       SM.changes.map(function (i) {
-        return '<tr><td>' + esc(i.x.name) + (i.x.c.A.resigned ? '<span class="rp-badge">퇴사</span>' : '') + '</td><td>' + i.kind + '</td><td class="sm mono">' + esc(X.moveText(i)) + '</td><td class="n">' + h2f(i.p) + ' → ' + h2f(i.c) + ' <span class="' + (i.d > 0 ? 'up' : 'dn') + '">(' + sgn(i.d, function (v) { return v.toFixed(2); }) + ')</span></td><td style="height:10mm"><span class="ed" contenteditable="true" data-ph="입력"></span></td></tr>';
+        return '<tr><td>' + esc(i.x.name) + (i.x.c.A.resigned ? '<span class="rp-badge">퇴사</span>' : '') + '</td><td>' + i.kind + '</td><td class="sm mono">' + esc(X.moveText(i)) + '</td><td class="n">' + h2f(i.p) + ' → ' + h2f(i.c) + ' <span class="' + (i.d > 0 ? 'up' : 'dn') + '">(' + sgn(i.d, function (v) { return v.toFixed(2); }) + ')</span></td><td style="height:8mm"><span class="ed" contenteditable="true" data-ph="입력"></span></td></tr>';
       }).join('') + '</tbody></table>';
     html += '</section>';
 
@@ -1054,14 +1069,21 @@ var OTReport = (function () {
     html += '<section><h2>2. 요약</h2><ul class="rp-list">' + F.map(function (f) { return '<li><b class="rp-lab">' + f[0] + '</b> ' + f[1] + '</li>'; }).join('') + '</ul></section>';
 
     // 2. 근무일 현황
+    var OTCoreLabel = function (m) { return OTCore.monthLabel(m); };
     var hl = function (m) { return m.holidays.map(function (d) { return d + '(' + (m.dayInfo[d - 1].wdKo || '') + ')'; }).join(', '); };
-    html += '<section><h2>3. 근무일 현황</h2><table class="rp-t"><thead><tr><th>구분</th><th>' + esc(r.label.p) + '</th><th>' + esc(r.label.c) + '</th><th>증감</th></tr></thead><tbody>' +
-      '<tr><td>전체 일수</td>' + dcell(r.prev.nDays, r.cur.nDays, function (v) { return v + '일'; }) + '</tr>' +
-      '<tr><td>평일</td>' + dcell(r.prev.weekdays, r.cur.weekdays, function (v) { return v + '일'; }) + '</tr>' +
-      '<tr><td>휴일</td>' + dcell(r.prev.holidays.length, r.cur.holidays.length, function (v) { return v + '일'; }) + '</tr>' +
-      '<tr><td>휴일 날짜</td><td class="n sm">' + hl(r.prev) + '</td><td class="n sm">' + hl(r.cur) + '</td><td></td></tr>' +
-      '<tr><td>기본급 포함 B/O (평일×2h)</td>' + dcell(r.prev.weekdays * 2, r.cur.weekdays * 2, hrs) + '</tr>' +
-      '</tbody></table></section>';
+    var rcal = function (m, other, isCur) {
+      var cells = [], first = m.dayInfo[0].wd; if (first == null) first = 0;
+      for (var i = 0; i < first; i++) cells.push('<td></td>');
+      m.dayInfo.forEach(function (d) { cells.push('<td class="' + (d.hol ? 'hd' : (d.wd === 0 || d.wd === 6 ? 'we' : '')) + '">' + d.d + '</td>'); });
+      while (cells.length < 42) cells.push('<td></td>');
+      var rows = ''; for (var k = 0; k < cells.length; k += 7) rows += '<tr>' + cells.slice(k, k + 7).join('') + '</tr>';
+      var dd = function (a, b) { if (!isCur) return ''; var d = a - b; return ' <span class="' + (d > 0 ? 'up' : d < 0 ? 'dn' : 'z') + '">(' + (d > 0 ? '+' : d < 0 ? '−' : '±') + Math.abs(d) + ')</span>'; };
+      return '<div class="rc-m"><div class="rc-h"><b>' + esc(OTCoreLabel(m)) + '</b><span>' + (isCur ? '이번 달' : '전달') + '</span></div>' +
+        '<table class="rc-t"><thead><tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th class="fr">금</th><th>토</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+        '<div class="rc-s"><span>전체 <b>' + m.nDays + '</b>일' + dd(m.nDays, other.nDays) + '</span><span>평일 <b>' + m.weekdays + '</b>일' + dd(m.weekdays, other.weekdays) + '</span><span class="hdx">휴일 <b>' + m.holidays.length + '</b>일' + dd(m.holidays.length, other.holidays.length) + '</span></div>' +
+        '</div>';
+    };
+    html += '<section><h2>3. 근무일 현황</h2><div class="rc-wrap">' + rcal(r.prev, r.cur, false) + rcal(r.cur, r.prev, true) + '</div></section>';
 
     // 3. OT·급여 합계
     var perWd = function (T) { return T.wdPersonDays ? T.wdOt / T.wdPersonDays : 0; }, perHd = function (T) { return T.hdPersonDays ? T.hdOt / T.hdPersonDays : 0; };
@@ -1327,10 +1349,10 @@ var OTReport = (function () {
       : '<div class="detail-bar"><div><b>요약 화면으로</b><span class="muted">달력 비교 · 비교 요약본</span></div><button class="btn ghost" type="button" data-go="analysis">← 요약으로 돌아가기</button></div>';
   }
   function toolbar(mode) {
-    if (mode === 'detail') return '<div class="toolbar no-print"><button class="btn ghost" type="button" data-go="analysis">← 요약으로</button><span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 상세 내용</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="report">비교 요약본 보기</button></span></div>';
+    if (mode === 'detail') return '<div class="toolbar no-print"><button class="btn ghost" type="button" data-go="analysis">← 요약으로</button><span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 상세 내용</span><span class="tb-right"><button class="btn" type="button" data-go="report">비교 요약본 출력</button></span></div>';
     return '<div class="toolbar no-print">' + (mode === 'report'
-      ? '<button class="btn ghost" type="button" data-go="analysis">← 분석 화면</button><span class="muted">A3 세로 1장으로 인쇄됩니다. 인쇄 창에서 용지를 A3로 고르세요</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="print">인쇄 / PDF 저장</button></span>'
-      : '<span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 분석 결과</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="report">비교 요약본 보기</button></span>') + '</div>';
+      ? '<button class="btn ghost" type="button" data-go="analysis">← 분석 화면</button><span class="muted">A3 세로 1장으로 인쇄됩니다. 인쇄 창에서 용지를 A3로 고르세요</span><span class="tb-right"><button class="btn" type="button" data-go="print">인쇄 / PDF 저장</button></span>'
+      : '<span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 분석 결과</span><span class="tb-right"><button class="btn" type="button" data-go="report">비교 요약본 출력</button></span>') + '</div>';
   }
   function bindToolbar() {
     document.querySelectorAll('[data-go]').forEach(function (b) {
@@ -1362,7 +1384,6 @@ var OTReport = (function () {
       '<div><span class="muted" style="font-size:.74rem">전체</span><b>' + m.nDays + '</b>' + chg(m.nDays, other.nDays) + '</div>' +
       '<div><span class="muted" style="font-size:.74rem">평일</span><b>' + wd + '</b>' + chg(wd, other.weekdays) + '</div>' +
       '<div><span class="muted" style="font-size:.74rem">휴일</span><b style="color:var(--hol)">' + hd + '</b>' + chg(hd, other.holidays.length) + '</div>' +
-      '<div><span class="muted" style="font-size:.74rem">기본급 포함 B/O</span><b>' + wd * 2 + 'h</b><span class="chg muted">평일×2h</span></div>' +
       '</div>' + miniCal(m) +
       '<p class="muted" style="font-size:.76rem">휴일: ' + m.holidays.map(function (d) { return d + '일(' + (m.dayInfo[d - 1].wdKo || '') + ')'; }).join(', ') + ' · 기준: ' + esc(m.holSource) + '</p></div>';
   }
@@ -1939,7 +1960,7 @@ var OTReconUI = (function () {
     var html = '';
     html += '<div class="toolbar no-print"><span class="muted">' + esc(OTCore.monthLabel(m)) + ' 타임시트 ↔ 이라크 시스템</span><span class="tb-right">' +
       '<button class="btn ghost" type="button" data-rc="onlydiff">' + (st.onlyDiff ? '전체 보기' : '불일치만 보기') + '</button>' +
-      '<button class="btn ghost" type="button" data-rc="xlsx">엑셀로 저장</button><button class="btn" type="button" data-rc="print">인쇄 / PDF 저장</button></span></div>';
+      '<button class="btn" type="button" data-rc="print">인쇄 / PDF 저장</button></span></div>';
     // 인쇄용 머리글
     html += '<div class="rc-print-head print-only"><div><div class="rp-kicker">' + esc(OTCore.monthLabel(m)) + ' · ' + esc((s.sites || []).join(', ')) + '</div><h1>타임시트 · 이라크 시스템 대조 결과</h1><p>작성일 ' + today() + '</p></div>' +
       '</div>';
