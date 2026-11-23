@@ -1353,16 +1353,25 @@ var OTReport = (function () {
       : '<div class="detail-bar"><div><b>요약 화면으로</b><span class="muted">달력 비교 · 비교 요약본</span></div><button class="btn ghost" type="button" data-go="analysis">← 요약으로 돌아가기</button></div>';
   }
   function toolbar(mode) {
-    if (mode === 'detail') return '<div class="toolbar no-print"><button class="btn ghost" type="button" data-go="analysis">← 요약으로</button><span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 상세 내용</span><span class="tb-right"><button class="btn" type="button" data-go="report">비교 요약본 출력</button></span></div>';
+    if (mode === 'detail') return '<div class="toolbar no-print"><button class="btn ghost" type="button" data-go="analysis">← 요약으로</button><span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 상세 내용</span><span class="tb-right"><button class="btn" type="button" data-go="report">출력</button></span></div>';
     return '<div class="toolbar no-print">' + (mode === 'report'
       ? '<button class="btn ghost" type="button" data-go="analysis">← 분석 화면</button><span class="muted">A3 세로 1장으로 인쇄됩니다. 인쇄 창에서 용지를 A3로 고르세요</span><span class="tb-right"><button class="btn" type="button" data-go="print">인쇄 / PDF 저장</button></span>'
-      : '<span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 분석 결과</span><span class="tb-right"><button class="btn ghost" type="button" data-go="detail">상세 보기</button><button class="btn" type="button" data-go="report">비교 요약본 출력</button></span>') + '</div>';
+      : '<span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 분석 결과</span><span class="tb-right"><button class="btn ghost" type="button" data-go="detail">전월 비교 상세 보기</button><button class="btn" type="button" data-go="report">출력</button></span>') + '</div>';
+  }
+  // 출력: 요약본을 만들어 바로 인쇄 미리보기를 열고, 닫으면 원래 화면으로 돌아감
+  function printReport() {
+    var back = state.view === 'report' ? 'analysis' : state.view, y = window.scrollY, done = false;
+    state.view = 'report'; render();
+    var restore = function () { if (done) return; done = true; window.removeEventListener('afterprint', restore); state.view = back; render(); window.scrollTo(0, y); };
+    window.addEventListener('afterprint', restore);
+    setTimeout(function () { window.print(); }, 150);
   }
   function bindToolbar() {
     document.querySelectorAll('[data-go]').forEach(function (b) {
       b.addEventListener('click', function () {
         var g = b.getAttribute('data-go');
-        if (g === 'report' || g === 'analysis' || g === 'detail') { state.view = g; render(); window.scrollTo(0, 0); }
+        if (g === 'report') { printReport(); return; }
+        if (g === 'analysis' || g === 'detail') { state.view = g; render(); window.scrollTo(0, 0); }
         if (g === 'print') window.print();
         if (g === 'xlsx') OTReport.toExcel(state.r, reportCtx());
       });
