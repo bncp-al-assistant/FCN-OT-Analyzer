@@ -1343,7 +1343,7 @@ var OTReport = (function () {
     if (state.view === 'detail') {
       $('out').innerHTML = [toolbar('detail'), secTotals(r), secFindings(r), secEffects(r), secWorkers(r), secMethod(), detailBar('back')].join('');
     } else {
-      $('out').innerHTML = [toolbar('analysis'), secCalendar(r), '<div class="sum-band"><h2>비교 요약본</h2><span class="muted">전체 요약 비교 · 결론 · 주요 체크사항</span></div>', secShift(r), secSummary(r), detailBar('go')].join('');
+      $('out').innerHTML = [toolbar('analysis'), secCalendar(r), '<div class="sum-band"><h2>비교 요약본</h2><span class="muted">전체 요약 비교 · 결론 · 주요 체크사항</span></div>', secShift(r), secSummary(r)].join('');
     }
     bindTabs(); bindToolbar();
   }
@@ -1356,7 +1356,7 @@ var OTReport = (function () {
     if (mode === 'detail') return '<div class="toolbar no-print"><button class="btn ghost" type="button" data-go="analysis">← 요약으로</button><span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 상세 내용</span><span class="tb-right"><button class="btn" type="button" data-go="report">비교 요약본 출력</button></span></div>';
     return '<div class="toolbar no-print">' + (mode === 'report'
       ? '<button class="btn ghost" type="button" data-go="analysis">← 분석 화면</button><span class="muted">A3 세로 1장으로 인쇄됩니다. 인쇄 창에서 용지를 A3로 고르세요</span><span class="tb-right"><button class="btn" type="button" data-go="print">인쇄 / PDF 저장</button></span>'
-      : '<span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 분석 결과</span><span class="tb-right"><button class="btn" type="button" data-go="report">비교 요약본 출력</button></span>') + '</div>';
+      : '<span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 분석 결과</span><span class="tb-right"><button class="btn ghost" type="button" data-go="detail">상세 보기</button><button class="btn" type="button" data-go="report">비교 요약본 출력</button></span>') + '</div>';
   }
   function bindToolbar() {
     document.querySelectorAll('[data-go]').forEach(function (b) {
