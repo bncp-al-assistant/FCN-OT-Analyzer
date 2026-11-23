@@ -497,6 +497,35 @@ tr.rc-bad td:first-child { box-shadow: inset 3px 0 0 var(--alert); }
 .report { line-height: 1.4; gap: 3.5mm; }
 .rp-shift td.cost { line-height: 1.22 !important; }
 .rp-t th, .rp-t td { padding-top: 2px; padding-bottom: 2px; }
+
+/* ===== 디자인: 네이비 (시안 A) ===== */
+/* A. Executive Navy */
+:root{--accent:#1f2a5c;--accent-soft:#e8ebf7;--ink:#141a2e;--rule:#e3e6ee;--hol:#d0662a;--hol-soft:#fdeee4}
+body{background:#fff}
+.wrap{padding-top:0;max-width:1180px}
+body{overflow-x:hidden}
+header.top{position:relative;padding:40px 0 44px;background:#1f2a5c;box-shadow:0 0 0 100vmax #1f2a5c;clip-path:inset(0 -100vmax);color:#fff;align-items:center}
+header.top .eyebrow{color:#aab4e6}
+header.top h1{color:#fff;font-size:2.7rem}
+header.top .lede{color:#cfd5f1}
+header.top .lede b{color:#fff}
+.drop{background:#fff;border:0;border-radius:16px;box-shadow:0 18px 40px rgba(6,12,40,.35);padding:18px}
+.btn{border-radius:10px;padding:9px 16px}
+.drop .btn{background:#e8a33d;border-color:#e8a33d;color:#1a1f33}
+.views.modes{margin-top:8px}
+.views.modes .view-tab{border-radius:14px;padding:14px 18px;box-shadow:0 2px 8px rgba(20,26,46,.05)}
+.views.modes .view-tab[aria-selected="true"]{background:#1f2a5c;border-color:#1f2a5c;box-shadow:0 10px 24px rgba(31,42,92,.25)}
+.views.modes .view-tab[aria-selected="true"] b{color:#fff}.views.modes .view-tab[aria-selected="true"] small{color:#c9d0ef}
+#out>.toolbar{border-radius:14px;border:0;background:#f3f5fa}
+.panel,.sm-tile,.sm-list{border-radius:16px;border-color:#e6e9f1;box-shadow:0 4px 18px rgba(20,26,46,.06)}
+.sec-head h2,.sum-band h2{display:flex;align-items:center;gap:10px}
+.sec-head h2::before{content:"";width:6px;height:20px;border-radius:3px;background:#e8a33d}
+.sum-band{border-bottom:0;background:#1f2a5c;color:#fff;border-radius:14px;padding:14px 20px}
+.sum-band .muted{color:#c9d0ef}
+.drop{color:#141a2e}
+.drop .eyebrow{color:#7a8293}
+
+@media (max-width:700px){header.top{padding:28px 0 30px}header.top h1{font-size:2rem}}
 </style>
 </head>
 <body>
