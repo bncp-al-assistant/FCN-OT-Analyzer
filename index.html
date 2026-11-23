@@ -260,6 +260,11 @@ details[open] .w-name .caret { transform: rotate(90deg); }
 .report .rp-op.ed { display: block; border-bottom: 1px solid var(--p-rule); }
 @media (max-width: 700px) { .report { padding: 18px 14px; } .rp-head { grid-template-columns: 1fr; } .rp-t { display: block; overflow-x: auto; } }
 
+.sum-band { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; border-bottom: 2px solid var(--ink); padding-bottom: 8px; margin-top: 8px; }
+.sum-band h2 { font-size: 1.35rem; font-weight: 700; }
+.detail-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; padding: 16px 18px; border: 1px solid var(--rule); border-radius: 12px; background: var(--rule-2); }
+.detail-bar > div { display: grid; gap: 2px; }
+.detail-bar .btn { font-size: .95rem; padding: 10px 18px; }
 @page { size: A3 portrait; margin: 12mm 12mm; }
 @media print {
   :root, body { background: #fff !important; color-scheme: light; }
@@ -1253,7 +1258,7 @@ var OTReport = (function () {
   function setMonths(a, b, isSample) {
     if (a && b && ymKey(a) && ymKey(b) && ymKey(a) > ymKey(b)) { var t = a; a = b; b = t; }
     if (a) state.prev = a; if (b) state.cur = b;
-    state.isSample = !!isSample;
+    state.isSample = !!isSample; state.view = 'analysis';
     render();
   }
   function handleFiles(list, slot) {
@@ -1309,10 +1314,20 @@ var OTReport = (function () {
     var zone = (c.sheetName || '').replace(/_.*$/, '').replace(/\bTCN\b/g, 'FCN');
     if (zone) $('zoneName').textContent = zone + ' · Time Sheet';
     if (state.view === 'report') { $('out').innerHTML = toolbar('report') + OTReport.build(r, reportCtx()); OTReport.bind(r, reportCtx()); bindToolbar(); window.scrollTo(0, 0); return; }
-    $('out').innerHTML = [toolbar('analysis'), secCalendar(r), secShift(r), secSummary(r), secTotals(r), secFindings(r), secEffects(r), secWorkers(r), secMethod()].join('');
+    if (state.view === 'detail') {
+      $('out').innerHTML = [toolbar('detail'), secTotals(r), secFindings(r), secEffects(r), secWorkers(r), secMethod(), detailBar('back')].join('');
+    } else {
+      $('out').innerHTML = [toolbar('analysis'), secCalendar(r), '<div class="sum-band"><h2>비교 요약본</h2><span class="muted">전체 요약 비교 · 결론 · 주요 체크사항</span></div>', secShift(r), secSummary(r), detailBar('go')].join('');
+    }
     bindTabs(); bindToolbar();
   }
+  function detailBar(kind) {
+    return kind === 'go'
+      ? '<div class="detail-bar"><div><b>상세 보기</b><span class="muted">팀 합계 · 주요 변화 · OT 증감 요인 · 작업자별 상세 · 계산 기준</span></div><button class="btn" type="button" data-go="detail">상세 보기 →</button></div>'
+      : '<div class="detail-bar"><div><b>요약 화면으로</b><span class="muted">달력 비교 · 비교 요약본</span></div><button class="btn ghost" type="button" data-go="analysis">← 요약으로 돌아가기</button></div>';
+  }
   function toolbar(mode) {
+    if (mode === 'detail') return '<div class="toolbar no-print"><button class="btn ghost" type="button" data-go="analysis">← 요약으로</button><span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 상세 내용</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="report">비교 요약본 보기</button></span></div>';
     return '<div class="toolbar no-print">' + (mode === 'report'
       ? '<button class="btn ghost" type="button" data-go="analysis">← 분석 화면</button><span class="muted">A3 세로 1장으로 인쇄됩니다. 인쇄 창에서 용지를 A3로 고르세요</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="print">인쇄 / PDF 저장</button></span>'
       : '<span class="muted">' + esc(state.r.label.p) + ' → ' + esc(state.r.label.c) + ' 분석 결과</span><span class="tb-right"><button class="btn ghost" type="button" data-go="xlsx">엑셀로 저장</button><button class="btn" type="button" data-go="report">비교 요약본 보기</button></span>') + '</div>';
@@ -1321,7 +1336,7 @@ var OTReport = (function () {
     document.querySelectorAll('[data-go]').forEach(function (b) {
       b.addEventListener('click', function () {
         var g = b.getAttribute('data-go');
-        if (g === 'report' || g === 'analysis') { state.view = g; render(); window.scrollTo(0, 0); }
+        if (g === 'report' || g === 'analysis' || g === 'detail') { state.view = g; render(); window.scrollTo(0, 0); }
         if (g === 'print') window.print();
         if (g === 'xlsx') OTReport.toExcel(state.r, reportCtx());
       });
